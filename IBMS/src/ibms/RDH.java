@@ -3,6 +3,14 @@ package ibms;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /* This class needs */
 
@@ -125,7 +133,20 @@ public class RDH {
    * Display all current holidays
    */  
   private static void displayHolidays(int currentUserId) {
-    //List all the holidays a driver has taken already
+    try {
+      //List all the holidays a driver has taken already
+      GregorianCalendar gcal = new GregorianCalendar();
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+      Date start = sdf.parse("2010.01.01");
+      Date end = sdf.parse("2010.01.14");
+      gcal.setTime(start);
+      while (gcal.getTime().before(end)) {
+          gcal.add(Calendar.DAY_OF_YEAR, 1);
+          System.out.println( gcal.getTime().toString());
+      }
+    } catch (ParseException ex) {
+      println("That doesn't look like a date?!?");
+    }
     throw new UnsupportedOperationException("Not yet implemented");
   } 
   
