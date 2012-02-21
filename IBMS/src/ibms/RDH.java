@@ -103,9 +103,11 @@ public class RDH {
    */
   public static void main(String[] args) {
       database.openBusDatabase();
-
-      
-      int[] drivers = DriverInfo.getDrivers();
+     
+      /*int[] driverIDs = DriverInfo.getDrivers();
+        String[] driverNames = new String [driverIDs.length];
+        for (int i=0; i<driverIDs.length; i++)
+            System.out.println(driverIDs[i]);*/
       
       //Greet       
       println("=RDS H14="); 
@@ -113,6 +115,7 @@ public class RDH {
        
       //while not done loop
       boolean gotUser = false;
+      int currentUserId;
       do {
         //Take driver ID
         println("Please enter your driver id: ");
@@ -121,25 +124,44 @@ public class RDH {
         try {
           int id = Integer.parseInt(driverId);
           
-          System.out.println(DriverInfo.findDriver((String) driverId));
-          
+          //Search for driver ID
+          if((currentUserId=DriverInfo.findDriver(driverId))==0) {
+              
+              //Driver doesn't exist error and try again
+              println("That ID was not found in the database, please try again");
+              break;
+          } else {
+              //Found driver continue
+              println("Thanks for logging in "+DriverInfo.getName(currentUserId));
+              gotUser = true;
+          } //driver id valid
         }
-        catch (NumberFormatException e) {
-          println("Your ID must be a number");
-        }
-        
-        //Search for driver ID
-          //Driver doesn't exist error and try again
-          //Found driver continue
-          
         //Catch none number
+        catch (NumberFormatException e) {
+          println("Your ID must be a number"); 
+        }
+       
       }
       while(!gotUser);
       
-      //Create data Format
-        //Request holidays
-        //View holidays
-        //Quit
+      println(" ");
+      
+      boolean done = false;
+      do {  
+        //Create data Format
+          println("Please choose an option:");
+          
+          //Request holidays
+          println("\t1: Request a holiday");
+          
+          //View holidays
+          println("\t2: Display my current holidays");
+          
+          //Check Days Left
+          println("\t3: Query days of holiday left");
+          
+          //Quit
+          println("\t0: Quit");
 
 
       //Switch on request
@@ -156,6 +178,10 @@ public class RDH {
               
       //List all the holidays a driver has taken already
       
-    //DONE
+    //DONE     
+      }
+      while(!done);
+      
+      
   } // main
 } //RDH
