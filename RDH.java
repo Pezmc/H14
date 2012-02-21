@@ -100,7 +100,7 @@ public class RDH {
       database.openBusDatabase();
 
       //Greet       
-      println("=RDS H14=") 
+      println("=RDS H14="); 
       println("Welcome to the H14 request driver holiday system\n"); 
        
       //while not done loop
@@ -108,7 +108,17 @@ public class RDH {
       do {
         //Take driver ID
         println("Please enter your driver id: ");
+        String driverId = readLine();
         
+        try {
+          int id = Integer.parseInt(driverId);
+          
+          System.out.println(DriverInfo.findDriver((String) driverId));
+          
+        }
+        catch (NumberFormatException e) {
+          println("Your ID must be a number");
+        }
         
         //Search for driver ID
           //Driver doesn't exist error and try again
