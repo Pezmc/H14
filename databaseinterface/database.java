@@ -43,7 +43,7 @@ public class database
     try
     {
       busDatabase = new database("12_COMP23420_H14", "12_COMP23420_H14",
-              "bgD8PYelpadF8GMv", "jdbc:mysql://ramen.cs.man.ac.uk:3306",
+              "bgD8PYelpadF8GMv", "jdbc:mysql://potnoodle.cs.man.ac.uk:3306",
               "com.mysql.jdbc.Driver");
       busDatabase.open();
     }
