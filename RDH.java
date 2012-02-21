@@ -14,7 +14,29 @@ decide who does what by when. The main implementation tasks are:
   T5-2: Implement the user interface; 
   T5-3: Connect the design classes to the IBMS bus database; 
   T5-4: Test the system (hint: test examples can be used for demonstration in Week 4).
+
+The interface should be interactive such that it will ask the user to enter the holiday request information and 
+display the approved holidays on the screen
+
 */
-public class H14-IBMS-RDH {
-  
+
+/*
+
+4.	A completely working system for UC1 is defined as follows:
+a.	Its interface is interactive: it asks for the input and displays the output, and its display is understandable, clear, neat and near professional.
+b.	Given the driver ID as the input, the interface shows the number of holidays that the driver has.
+c.	The driver selects specific dates for the holidays and the interface will display one of the two outcomes: (1) holidays granted; (2) holidays rejected due to invalid dates. 
+d.	The above operations should be repeatable without crashing the system.
+
+
+*/
+
+public class RDH {
+  //Prompt user for driver ID
+    //Display holidays driver has at the moment
+  //Allow user to request new holidays 
+    //Take start date and end date as input
+    //Holiday is accepted or rejected due to invalid dates
+
+  //Don't crash
 }
