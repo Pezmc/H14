@@ -8,11 +8,11 @@ import java.io.InputStreamReader;
 
 /*
 
-4.	A completely working system for UC1 is defined as follows:
-a.	Its interface is interactive: it asks for the input and displays the output, and its display is understandable, clear, neat and near professional.
-b.	Given the driver ID as the input, the interface shows the number of holidays that the driver has.
-c.	The driver selects specific dates for the holidays and the interface will display one of the two outcomes: (1) holidays granted; (2) holidays rejected due to invalid dates. 
-d.	The above operations should be repeatable without crashing the system.
+4.A completely working system for UC1 is defined as follows:
+a.Its interface is interactive: it asks for the input and displays the output, and its display is understandable, clear, neat and near professional.
+b.Given the driver ID as the input, the interface shows the number of holidays that the driver has.
+c.The driver selects specific dates for the holidays and the interface will display one of the two outcomes: (1) holidays granted; (2) holidays rejected due to invalid dates. 
+d.The above operations should be repeatable without crashing the system.
 
 */
 

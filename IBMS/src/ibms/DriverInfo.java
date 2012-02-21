@@ -5,6 +5,7 @@
 package ibms;
 
 
+import java.util.ArrayList;
 import java.util.Date;
  
 /**
@@ -22,9 +23,22 @@ import java.util.Date;
  */
 public class DriverInfo 
 {
+
+    public static int getNoOfUnavailableDrivers(Date i) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static int getTotalDrivers() {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public static ArrayList getUnavailableDates(int driversID) {
+        throw new UnsupportedOperationException("Not yet implemented");
+    }
   // This class is not intended to be instantiated
   private DriverInfo() 
   { 
+       super();
   }
 
   /**
