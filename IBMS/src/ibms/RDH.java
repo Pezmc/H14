@@ -104,6 +104,9 @@ public class RDH {
   public static void main(String[] args) {
       database.openBusDatabase();
 
+      
+      int[] drivers = DriverInfo.getDrivers();
+      
       //Greet       
       println("=RDS H14="); 
       println("Welcome to the H14 request driver holiday system\n"); 
