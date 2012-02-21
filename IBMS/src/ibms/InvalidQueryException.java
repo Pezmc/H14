@@ -1,3 +1,8 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ibms;
 
 /**
  * This exception will be thrown if you attempt to make an invalid
