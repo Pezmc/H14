@@ -116,8 +116,9 @@ public class RDH {
   /**
    * Display the amount of days of holiday
    */
-  private static void displayHolidaysLeft(int currentUserId) {
-    throw new UnsupportedOperationException("Not yet implemented");
+  private static void displayHolidaysLeft(int driverID) {
+    println("You have " + (maxHolidays - DriverInfo.getHolidaysTaken(driverID))
+                        + " days remaining\n");
   }
 
   /**
@@ -182,7 +183,7 @@ public class RDH {
       }
       while(!gotUser);
       
-      println(" ");
+      println(" "); //just be tidy
       
       boolean done = false;
       do {  
@@ -206,6 +207,7 @@ public class RDH {
         try {
           //Read user input
             String userInput = readLine();
+            println(" "); //just be tidy
             int userOption = Integer.parseInt(userInput);
             
           //Switch on request
