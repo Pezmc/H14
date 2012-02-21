@@ -98,18 +98,25 @@ public class RDH {
    */
   public static void main(String[] args) {
       database.openBusDatabase();
+
+      //Greet       
+      println("=RDS H14=") 
+      println("Welcome to the H14 request driver holiday system\n"); 
        
-       
-       
-      //Greet
       //while not done loop
+      boolean gotUser = false;
+      do {
         //Take driver ID
+        println("Please enter your driver id: ");
+        
         
         //Search for driver ID
           //Driver doesn't exist error and try again
           //Found driver continue
           
         //Catch none number
+      }
+      while(!gotUser);
       
       //Create data Format
         //Request holidays
