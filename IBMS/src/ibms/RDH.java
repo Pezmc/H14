@@ -120,31 +120,29 @@ public class RDH {
                 
                 System.out.println(DriverInfo.findDriver((String) driverId));
                 
+                //Search for driver ID
+                int[] driverIDs = DriverInfo.getDrivers();
+                int i = 0;
+                boolean found = false;
+                for (i = 0; i < driverIDs.length; i ++) {
+                    if (id == driverIDs[i]) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                //Driver doesn't exist error and try again
+                //Found driver continue
+                if (found != true) {
+                    println("Driver was not found.");
+                    println("Please enter a correct driver ID next time.");
+                }
+                
             }
+            //Catch none number
             catch (NumberFormatException e) {
                 println("Your ID must be a number");
             }
-            
-            //Search for driver ID
-            int[] driverIDs = DriverInfo.getDrivers();
-            int i = 0;
-            boolean found = false;
-            for (i = 0; i < driverIDs.length; i ++) {
-                if (id == driverIDs[i]) {
-                    found = true;
-                    break;
-                }
-            }
-            
-            //Driver doesn't exist error and try again
-            //Found driver continue
-            if (found != true) {
-                println("Driver was not found.");
-                println("Please enter a correct driver ID next time.");
-            }
-            
-            
-            //Catch none number
         }
         while(!gotUser);
         
@@ -164,9 +162,13 @@ public class RDH {
         //check their are are enough drivers over the period
         //10?
         //mark holiday taken 
+        
         //exit
         
         //List all the holidays a driver has taken already
+        System.out.println("You have "
+                           + (maxHolidays-DriverInfo.getHolidaysTaken(id))
+                           + " holidays remaining\n");
         
         //DONE
     } // main
