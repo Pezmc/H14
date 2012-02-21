@@ -99,6 +99,36 @@ public class RDH {
   }
   
   /**
+   * Process for requesting a holiday
+   */
+  private static void requestHoliday(int currentUserId) {
+    //read start date 0 - validate etc...
+        //read end date - validate etc…
+        //complete - calclate holiday lenth
+          //check holiday legth + current holidays not bigger than toal holidays
+          //check their are are enough drivers over the period
+            //10?
+          //mark holiday taken 
+        //exit
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+  
+  /**
+   * Display the amount of days of holiday
+   */
+  private static void displayHolidaysLeft(int currentUserId) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  /**
+   * Display all current holidays
+   */  
+  private static void displayHolidays(int currentUserId) {
+    //List all the holidays a driver has taken already
+    throw new UnsupportedOperationException("Not yet implemented");
+  } 
+  
+  /**
    * @param args the command line arguments
    */
   public static void main(String[] args) {
@@ -115,21 +145,29 @@ public class RDH {
        
       //while not done loop
       boolean gotUser = false;
-      int currentUserId;
+      int currentUserId = 0;
       do {
         //Take driver ID
         println("Please enter your driver id: ");
         String driverId = readLine();
+        println("");
         
         try {
           int id = Integer.parseInt(driverId);
+          int[] drivers = DriverInfo.getDrivers();
+          
+          boolean validId = false;
+          for (int i = 0; i < drivers.length; i++) {
+            if(id == drivers[i]) {
+              currentUserId = drivers[i];
+              break;
+            } // if
+          } // for
           
           //Search for driver ID
-          if((currentUserId=DriverInfo.findDriver(driverId))==0) {
-              
+          if(currentUserId==0) {
               //Driver doesn't exist error and try again
               println("That ID was not found in the database, please try again");
-              break;
           } else {
               //Found driver continue
               println("Thanks for logging in "+DriverInfo.getName(currentUserId));
@@ -162,26 +200,38 @@ public class RDH {
           
           //Quit
           println("\t0: Quit");
+          
+          println("\nEnter your option: ");
 
-
-      //Switch on request
-      
-      //Requst holiday
-        //read start date 0 - validate etc...
-        //read end date - validate etc…
-        //complete - calclate holiday lenth
-          //check holiday legth + current holidays not bigger than toal holidays
-          //check their are are enough drivers over the period
-            //10?
-          //mark holiday taken 
-        //exit
-              
-      //List all the holidays a driver has taken already
-      
-    //DONE     
+        try {
+          //Read user input
+            String userInput = readLine();
+            int userOption = Integer.parseInt(userInput);
+            
+          //Switch on request
+            switch(userOption) {
+                case 1: //request
+                    requestHoliday(currentUserId);
+                    break;
+                case 2: //display holidays
+                    displayHolidays(currentUserId);
+                    break;
+                case 3: //days of holiday left
+                    displayHolidaysLeft(currentUserId);
+                    break;
+                case 0: //exit
+                    println("\nYou are now logged out!");
+                    done = true;
+            }
+ 
+        }
+        catch(NumberFormatException e) {
+            println("You can only enter a number here...\n");
+        }
       }
       while(!done);
       
+      println("Thank you for using our system");
       
   } // main
 } //RDH
