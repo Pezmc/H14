@@ -1,2 +1,3 @@
-#!/bin/bash
 export CLASSPATH=$CLASSPATH:./mysql-connector-java-5.1.12-bin.jar
+javac RDH.java
+java RDH
