@@ -31,6 +31,14 @@ d.	The above operations should be repeatable without crashing the system.
 
 */
 
+/*
+Driver logs into roster system.
+Driver gives notice about upcoming holiday.
+Enough notice is given.
+Request is confirmed and allowed.
+Driver logs out of system.
+*/
+
 public class RDH {
   //Prompt user for driver ID
     //Display holidays driver has at the moment
@@ -38,5 +46,65 @@ public class RDH {
     //Take start date and end date as input
     //Holiday is accepted or rejected due to invalid dates
 
-  //Don't crash
-}
+  //Don't crash and allow go back to start
+  
+  // Buffered reader to grab input
+  static BufferedReader input =
+               new BufferedReader(new InputStreamReader(System.in));
+  static int maxHolidays = 25;
+  static int minDrivers = 25;
+  
+  /**
+   * Read a line of input from STDIn
+   */
+  public static String readLine() {
+    String string = "";
+    try {
+      string = input.readLine();
+    }
+    catch (IOException e) {
+      System.out.println("Error with STD IN"); 
+      System.exit(1);
+    }
+    return string;
+  }
+  
+  /**
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+      database.openBusDatabase();
+       
+      //Greet
+      //while not done loop
+        //Take driver ID
+        
+        //Search for driver ID
+          //Driver doesn't exist error and try again
+          //Found driver continue
+          
+        //Catch none number
+      
+      //Create data Format
+        //Request holidays
+        //View holidays
+        //Quit
+
+
+      //Switch on request
+      
+      //Requst holiday
+        //read start date 0 - validate etc...
+        //read end date - validate etc…
+        //complete - calclate holiday lenth
+          //check holiday legth + current holidays not bigger than toal holidays
+          //check their are are enough drivers over the period
+            //10?
+          //mark holiday taken 
+        //exit
+              
+      //List all the holidays a driver has taken already
+      
+    //DONE
+  } // main
+} //RDH
