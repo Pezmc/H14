@@ -245,6 +245,9 @@ public class RDH {
                 case 0: //exit
                     println("\nYou are now logged out!");
                     done = true;
+                    break;
+                default:
+                    println("That isn't a valid option, please try again!\n");
             }
  
         }
