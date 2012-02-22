@@ -75,7 +75,9 @@ public class RDH {
   static BufferedReader input =
                new BufferedReader(new InputStreamReader(System.in));
   static int maxHolidays = 25;
-  static int minDrivers = 25;
+  static int minDrivers = 10;
+  
+  public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
   
   /**
    * Read a line of input from STDIn
@@ -106,20 +108,165 @@ public class RDH {
     System.out.println(message);
   }
   
+  private static boolean submitHolidayRequest(int currentUserId, Date start, Date end) {
+    if (start == null || end == null){
+      System.out.println("Please choose a start and an end first!");
+      return false;
+    }
+    
+        
+        
+          //10?
+        //mark holiday taken
+    
+    //calclate holiday lenth
+    int holidayLength = 0;
+    
+    println("Taking an extra "+holidayLength+" days of holiday!");
+    
+    //check holiday legth + current holidays not bigger than toal holidays
+    if(holidayLength+DriverInfo.getHolidaysTaken(currentUserId) > maxHolidays) {
+      println("You trying to book more than the max of "+maxHolidays
+              + "days of holiday this year!");
+      println("Please choose a shorter holiday");
+      return false;
+    }
+    
+    //check their are are enough drivers over the period
+      //by checking every day
+    int availableDrivers = 0;
+    for(int x = 0; x < 100; x++) {
+      availableDrivers = DriverInfo.getNoOfUnavailableDrivers(x);
+      
+      if()
+    }
+                    
+                        int count = DriverInfo.getNoOfUnavailableDrivers(i);
+                        if (!(DriverInfo.getTotalDrivers() - count > 10))
+                          checkNext = false;
+                        i.setDate(i.getDate()+1);
+                      }
+                      //System.out.println(startDate);
+
+                      if (checkNext)
+                      {
+                        //System.out.println("There are available drivers.");
+                        Date k = startDate;
+                       // System.out.println(k);
+                       // System.out.println(startDate);
+                        //System.out.println(endDate);
+
+                        while (k.compareTo(endDate)<=0)
+                        {
+                          //System.out.println("storing" + k);
+                          DriverInfo.setAvailable(driversID, k  , false);
+                          k.setDate(k.getDate()+1);
+                        }
+                        // Updating the holidays taken
+                        DriverInfo.setHolidaysTaken(driversID,
+                                DriverInfo.getHolidaysTaken(driversID)+holidayDuration);
+                        System.out.println("Holidays approved!");
+                        rdhDone = true;
+                      }
+                      else
+                        System.out.println("There arent enough drivers available at"
+                                           + " certain dates that you have chosen.");
+
+                    }
+                  }
+                  else
+                    System.out.println("You dont have enough holidays left");
+  }  
+  
+  private static Date chooseDate(boolean endDate, Date start, Date end) {
+    println("Enter "+(endDate ? "end" : "start")+" date (YYYY-MM-DD) :");
+    String givenDate = readLine();
+
+    try {
+      if(endDate)
+        end = (Date)dateFormat.parse(givenDate);
+      else
+        start = (Date)dateFormat.parse(givenDate);
+      
+      if(start != null&&end != null) {
+        if(!(start.before(end))) {
+          if(endDate)
+            println("The start date should be before the end date!");
+          else
+            println("The end date should be after the start date!");
+          println("Please choose again... ");
+          return null;
+        } //if
+      } // if
+    }
+    catch (ParseException e) {
+        System.out.println("Invalid date");
+        return null;
+    } // catch
+    
+    //If we got here the date is valid
+    if(endDate)
+      return end;
+    else
+      return start;
+  }
+  
   /**
    * Process for requesting a holiday
    */
   private static void requestHoliday(int currentUserId) {
     //read start date 0 - validate etc...
         //read end date - validate etc…
-        //complete - calclate holiday lenth
-          //check holiday legth + current holidays not bigger than toal holidays
-          //check their are are enough drivers over the period
-            //10?
-          //mark holiday taken 
+        //complete
         //exit
-    throw new UnsupportedOperationException("Not yet implemented");
-  }
+    boolean requestHolidayDone = false;
+    do {
+      Date start = null;
+      Date end = null; 
+
+      println("Current request:");
+      print("\tHoliday from "+(start==null ? "-" : dateFormat.format(start))+"");
+      println("\tto "+(end==null ? "-" : dateFormat.format(end))+".\n");
+      
+      println("Please choose your option:");
+      
+      println("\t1: Select start date");
+      println("\t2: Select end date");
+      println("\t3: Submit holiday request");
+      println("\t0: Cancel request");
+
+      try {
+        //Read user input
+          String userInput = readLine();
+          println(" "); //just be tidy
+          int userOption = Integer.parseInt(userInput);
+
+        //Switch on request
+          switch(userOption) {
+              case 1: //choose start date
+                  start = chooseDate(false, start, end);
+                  break;
+              case 2: //choose end date
+                  end = chooseDate(true, start, end);
+                  break;
+              case 3: //submit request
+                  requestHolidayDone = submitHolidayRequest(currentUserId, start, end);
+                  break;
+              case 0: //exit
+                  println("Returning to the main menu!\n");
+                  requestHolidayDone = true;
+                  break;
+              default:
+                  println("That isn't a valid option, please try again!\n");
+          }
+
+      }
+      catch(NumberFormatException e) {
+          println("You can only enter a number here...\n");
+      }
+      
+    } while (!requestHolidayDone); 
+  } //requestHoliday
   
   /**
    * Display the amount of days of holiday

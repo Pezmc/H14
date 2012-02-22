@@ -29,7 +29,8 @@ public class DriverInfo
   }
 
   public static int getTotalDrivers() {
-      throw new UnsupportedOperationException("Not yet implemented");
+      int[] drivers = DriverInfo.getDrivers();   
+      return drivers.length;
   }
 
   public static ArrayList getUnavailableDates(int driversID) {
