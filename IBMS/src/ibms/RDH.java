@@ -134,48 +134,35 @@ public class RDH {
     
     //check their are are enough drivers over the period
       //by checking every day
+    int totalDrivers = DriverInfo.getTotalDrivers();
     int availableDrivers = 0;
-    for(int x = 0; x < 100; x++) {
-      availableDrivers = DriverInfo.getNoOfUnavailableDrivers(x);
+    Date compare = (Date) start.clone(); //make sure it's not a pointer
+    while(compare.compareTo(end)<=0) {
+      //THIS NEEDS CORRECTING...
+      availableDrivers = DriverInfo.getNoOfUnavailableDrivers(compare);
       
-      if()
+      if(totalDrivers-availableDrivers<10) {
+        println("Too many drivers have taken holidays on these dates...");
+        return false;
+      }
+      
+      //Move one forward
+      compare.setDate(compare.getDate()+1);
     }
-                    
-                        int count = DriverInfo.getNoOfUnavailableDrivers(i);
-                        if (!(DriverInfo.getTotalDrivers() - count > 10))
-                          checkNext = false;
-                        i.setDate(i.getDate()+1);
-                      }
-                      //System.out.println(startDate);
-
-                      if (checkNext)
-                      {
-                        //System.out.println("There are available drivers.");
-                        Date k = startDate;
-                       // System.out.println(k);
-                       // System.out.println(startDate);
-                        //System.out.println(endDate);
-
-                        while (k.compareTo(endDate)<=0)
-                        {
-                          //System.out.println("storing" + k);
-                          DriverInfo.setAvailable(driversID, k  , false);
-                          k.setDate(k.getDate()+1);
-                        }
-                        // Updating the holidays taken
-                        DriverInfo.setHolidaysTaken(driversID,
-                                DriverInfo.getHolidaysTaken(driversID)+holidayDuration);
-                        System.out.println("Holidays approved!");
-                        rdhDone = true;
-                      }
-                      else
-                        System.out.println("There arent enough drivers available at"
-                                           + " certain dates that you have chosen.");
-
-                    }
-                  }
-                  else
-                    System.out.println("You dont have enough holidays left");
+    
+    //They are allowed to take the holiday
+    compare = (Date) start.clone(); //make sure it's not a pointer
+    while(compare.compareTo(end)<=0) {
+      println("\nBooked date "+compare);
+      DriverInfo.setAvailable(currentUserId, compare, false); //mark busy
+      compare.setDate(compare.getDate()+1);
+    }
+    
+    DriverInfo.setHolidaysTaken(currentUserId,
+            holidayLength+DriverInfo.getHolidaysTaken(currentUserId));
+    println("Your holidays have been approved!");
+    
+    return true;
   }  
   
   private static Date chooseDate(boolean endDate, Date start, Date end) {
