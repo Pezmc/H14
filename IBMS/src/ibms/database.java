@@ -3,6 +3,7 @@ package ibms;
 import java.sql.*;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.ArrayList;
 
 /**
  * This class contains the code which actually does the database access.
@@ -505,7 +506,7 @@ public class database
     public <T> ArrayList<T> getResult(String target, String source, String c) {
         try {
             String query = "select " + target + " from " + source + " ";
-            if (conditions != null) {
+            if (c != null) {
                 query += "where " + c;
             }
             
