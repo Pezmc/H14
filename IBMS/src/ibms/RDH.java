@@ -83,93 +83,148 @@ public class RDH {
         }
         return string;
     }
-    
-    /**
-     * Print out a line (alias)
-     */
-    private static void print(String message) {
-        System.out.print(message);
-    }
-    
-    /**
-     * Print out information to the user (alias)
-     */
-    private static void println(String message) {
-        System.out.println(message);
-    }
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
-        database.openBusDatabase();
-        
-        //Greet       
-        println("=RDS H14="); 
-        println("Welcome to the H14 request driver holiday system\n"); 
-        
-        //while not done loop
-        boolean gotUser = false;
-        do {
-            //Take driver ID
-            println("Please enter your driver id: ");
-            String driverId = readLine();
-            
-            try {
-                int id = Integer.parseInt(driverId);
-                
-                System.out.println(DriverInfo.findDriver((String) driverId));
-                
-                //Search for driver ID
-                int[] driverIDs = DriverInfo.getDrivers();
-                int i = 0;
-                boolean found = false;
-                for (i = 0; i < driverIDs.length; i ++) {
-                    if (id == driverIDs[i]) {
-                        found = true;
-                        break;
-                    }
-                }
-                
-                //Driver doesn't exist error and try again
-                //Found driver continue
-                if (found != true) {
-                    println("Driver was not found.");
-                    println("Please enter a correct driver ID next time.");
-                }
-                
-            }
-            //Catch none number
-            catch (NumberFormatException e) {
-                println("Your ID must be a number");
-            }
-        }
-        while(!gotUser);
-        
-        //Create data Format
-        //Request holidays
-        //View holidays
-        //Quit
-        
-        
-        //Switch on request
-        
-        //Requst holiday
-        //read start date 0 - validate etc...
+  
+  /**
+   * Print out information to the user (alias)
+   */
+  private static void println(String message) {
+    System.out.println(message);
+  }
+  
+  /**
+   * Process for requesting a holiday
+   */
+  private static void requestHoliday(int currentUserId) {
+    //read start date 0 - validate etc...
         //read end date - validate etc…
         //complete - calclate holiday lenth
-        //check holiday legth + current holidays not bigger than toal holidays
-        //check their are are enough drivers over the period
-        //10?
-        //mark holiday taken 
-        
+          //check holiday legth + current holidays not bigger than toal holidays
+          //check their are are enough drivers over the period
+            //10?
+          //mark holiday taken 
         //exit
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+  
+  /**
+   * Display the amount of days of holiday
+   */
+  private static void displayHolidaysLeft(int currentUserId) {
+    throw new UnsupportedOperationException("Not yet implemented");
+  }
+
+  /**
+   * Display all current holidays
+   */  
+  private static void displayHolidays(int currentUserId) {
+    //List all the holidays a driver has taken already
+    throw new UnsupportedOperationException("Not yet implemented");
+  } 
+  
+  /**
+   * @param args the command line arguments
+   */
+  public static void main(String[] args) {
+      database.openBusDatabase();
+     
+      /*int[] driverIDs = DriverInfo.getDrivers();
+        String[] driverNames = new String [driverIDs.length];
+        for (int i=0; i<driverIDs.length; i++)
+            System.out.println(driverIDs[i]);*/
+      
+      //Greet       
+      println("=RDS H14="); 
+      println("Welcome to the H14 request driver holiday system\n"); 
+       
+      //while not done loop
+      boolean gotUser = false;
+      int currentUserId = 0;
+      do {
+        //Take driver ID
+        println("Please enter your driver id: ");
+        String driverId = readLine();
+        println("");
         
-        //List all the holidays a driver has taken already
-        System.out.println("You have "
-                           + (maxHolidays-DriverInfo.getHolidaysTaken(id))
-                           + " holidays remaining\n");
-        
-        //DONE
-    } // main
+        try {
+          int id = Integer.parseInt(driverId);
+          int[] drivers = DriverInfo.getDrivers();
+          
+          boolean validId = false;
+          for (int i = 0; i < drivers.length; i++) {
+            if(id == drivers[i]) {
+              currentUserId = drivers[i];
+              break;
+            } // if
+          } // for
+          
+          //Search for driver ID
+          if(currentUserId==0) {
+              //Driver doesn't exist error and try again
+              println("That ID was not found in the database, please try again");
+          } else {
+              //Found driver continue
+              println("Thanks for logging in "+DriverInfo.getName(currentUserId));
+              gotUser = true;
+          } //driver id valid
+        }
+        //Catch none number
+        catch (NumberFormatException e) {
+          println("Your ID must be a number"); 
+        }
+       
+      }
+      while(!gotUser);
+      
+      println(" ");
+      
+      boolean done = false;
+      do {  
+        //Create data Format
+          println("Please choose an option:");
+          
+          //Request holidays
+          println("\t1: Request a holiday");
+          
+          //View holidays
+          println("\t2: Display my current holidays");
+          
+          //Check Days Left
+          println("\t3: Query days of holiday left");
+          
+          //Quit
+          println("\t0: Quit");
+          
+          println("\nEnter your option: ");
+
+        try {
+          //Read user input
+            String userInput = readLine();
+            int userOption = Integer.parseInt(userInput);
+            
+          //Switch on request
+            switch(userOption) {
+                case 1: //request
+                    requestHoliday(currentUserId);
+                    break;
+                case 2: //display holidays
+                    displayHolidays(currentUserId);
+                    break;
+                case 3: //days of holiday left
+                    displayHolidaysLeft(currentUserId);
+                    break;
+                case 0: //exit
+                    println("\nYou are now logged out!");
+                    done = true;
+            }
+ 
+        }
+        catch(NumberFormatException e) {
+            println("You can only enter a number here...\n");
+        }
+      }
+      while(!done);
+      
+      println("Thank you for using our system");
+      
+  } // main
 } //RDH

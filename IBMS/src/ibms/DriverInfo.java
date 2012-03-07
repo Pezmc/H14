@@ -5,6 +5,7 @@
 package ibms;
 
 
+import java.util.ArrayList;
 import java.util.Date;
  
 /**
@@ -22,9 +23,28 @@ import java.util.Date;
  */
 public class DriverInfo 
 {
+
+    public static int getNoOfUnavailableDrivers(Date i) {
+        if (i == null) throw new InvalidQueryException("Date is null.");
+        
+        database db = database.busDatabase;
+        DateFormate format = new SimpleDateFormat("dd-mm-yyyy");
+    }
+
+    public static int getTotalDrivers() {
+        database db = database.busDatabase;
+        return db.getList("driver", null);
+    }
+
+    public static ArrayList getUnavailableDates(int driversID) {
+        database db = database.busDatabase;
+        return db.getResults("day", "driver_availability", "driver = '" + driversID + "' and available = '0'");
+    }
+    
   // This class is not intended to be instantiated
   private DriverInfo() 
   { 
+       super();
   }
 
   /**
