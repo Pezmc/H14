@@ -107,20 +107,21 @@ public class RDH {
   private static void print(String message) {
     System.out.print(message);
   }
+
+  private static int distanceBetweenDates(Date start, Date end) {
+    long endL = end.getTime();
+    long startL = start.getTime();
+    return (int) ((endL - startL) / 86400000);
+  }
   
   private static boolean submitHolidayRequest(int currentUserId, Date start, Date end) {
     if (start == null || end == null){
       System.out.println("Please choose a start and an end first!");
       return false;
     }
-    
-        
-        
-          //10?
-        //mark holiday taken
-    
+       
     //calclate holiday lenth
-    int holidayLength = 0;
+    int holidayLength = distanceBetweenDates(start, end);
     
     println("Taking an extra "+holidayLength+" days of holiday!");
     
@@ -138,7 +139,6 @@ public class RDH {
     int availableDrivers = 0;
     Date compare = (Date) start.clone(); //make sure it's not a pointer
     while(compare.compareTo(end)<=0) {
-      //THIS NEEDS CORRECTING...
       availableDrivers = DriverInfo.getNoOfUnavailableDrivers(compare);
       
       if(totalDrivers-availableDrivers<10) {
