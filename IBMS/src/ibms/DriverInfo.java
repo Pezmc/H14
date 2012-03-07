@@ -23,19 +23,22 @@ import java.util.Date;
  */
 public class DriverInfo 
 {
+    public static int getNoOfUnavailableDrivers(Date i) {
+        if (i == null) throw new InvalidQueryException("Date is null.");
+        
+        database db = database.busDatabase;
+        DateFormate format = new SimpleDateFormat("dd-mm-yyyy");
+    }
 
-  public static int getNoOfUnavailableDrivers(Date i) {
-      throw new UnsupportedOperationException("Not yet implemented");
-  }
+    public static int getTotalDrivers() {
+        database db = database.busDatabase;
+        return db.getList("driver", null);
+    }
 
-  public static int getTotalDrivers() {
-      int[] drivers = DriverInfo.getDrivers();   
-      return drivers.length;
-  }
-
-  public static ArrayList getUnavailableDates(int driversID) {
-      throw new UnsupportedOperationException("Not yet implemented");
-  }
+    public static ArrayList getUnavailableDates(int driversID) {
+        database db = database.busDatabase;
+        return db.getResults("day", "driver_availability", "driver = '" + driversID + "' and available = '0'");
+    }
   
   // This class is not intended to be instantiated
   private DriverInfo() 
