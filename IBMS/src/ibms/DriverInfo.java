@@ -23,7 +23,6 @@ import java.util.Date;
  */
 public class DriverInfo 
 {
-
     public static int getNoOfUnavailableDrivers(Date i) {
         if (i == null) throw new InvalidQueryException("Date is null.");
         
@@ -40,7 +39,7 @@ public class DriverInfo
         database db = database.busDatabase;
         return db.getResults("day", "driver_availability", "driver = '" + driversID + "' and available = '0'");
     }
-    
+  
   // This class is not intended to be instantiated
   private DriverInfo() 
   { 

@@ -3,6 +3,14 @@ package ibms;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /* This class needs */
 
@@ -62,26 +70,26 @@ import java.io.InputStreamReader;
  * Takes driver ID and requests holidays
  */
 public class RDH {
-    
-    // Buffered reader to grab input
-    static BufferedReader input =
-    new BufferedReader(new InputStreamReader(System.in));
-    static int maxHolidays = 25;
-    static int minDrivers = 25;
-    
-    /**
-     * Read a line of input from STDIn
-     */
-    public static String readLine() {
-        String string = "";
-        try {
-            string = input.readLine();
-        }
-        catch (IOException e) {
-            System.out.println("Error with STD IN"); 
-            System.exit(1);
-        }
-        return string;
+  
+  // Buffered reader to grab input
+  static BufferedReader input =
+               new BufferedReader(new InputStreamReader(System.in));
+  static int maxHolidays = 25;
+  static int minDrivers = 10;
+  
+  public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+  
+  /**
+   * Read a line of input from STDIn
+   */
+  public static String readLine() {
+    String string = "";
+    try {
+      string = input.readLine();
+    }
+    catch (IOException e) {
+      System.out.println("Error with STD IN"); 
+      System.exit(1);
     }
   
   /**
@@ -91,33 +99,179 @@ public class RDH {
     System.out.println(message);
   }
   
+  private static boolean submitHolidayRequest(int currentUserId, Date start, Date end) {
+    if (start == null || end == null){
+      System.out.println("Please choose a start and an end first!");
+      return false;
+    }
+    
+        
+        
+          //10?
+        //mark holiday taken
+    
+    //calclate holiday lenth
+    int holidayLength = 0;
+    
+    println("Taking an extra "+holidayLength+" days of holiday!");
+    
+    //check holiday legth + current holidays not bigger than toal holidays
+    if(holidayLength+DriverInfo.getHolidaysTaken(currentUserId) > maxHolidays) {
+      println("You trying to book more than the max of "+maxHolidays
+              + "days of holiday this year!");
+      println("Please choose a shorter holiday");
+      return false;
+    }
+    
+    //check their are are enough drivers over the period
+      //by checking every day
+    int totalDrivers = DriverInfo.getTotalDrivers();
+    int availableDrivers = 0;
+    Date compare = (Date) start.clone(); //make sure it's not a pointer
+    while(compare.compareTo(end)<=0) {
+      //THIS NEEDS CORRECTING...
+      availableDrivers = DriverInfo.getNoOfUnavailableDrivers(compare);
+      
+      if(totalDrivers-availableDrivers<10) {
+        println("Too many drivers have taken holidays on these dates...");
+        return false;
+      }
+      
+      //Move one forward
+      compare.setDate(compare.getDate()+1);
+    }
+    
+    //They are allowed to take the holiday
+    compare = (Date) start.clone(); //make sure it's not a pointer
+    while(compare.compareTo(end)<=0) {
+      println("\nBooked date "+compare);
+      DriverInfo.setAvailable(currentUserId, compare, false); //mark busy
+      compare.setDate(compare.getDate()+1);
+    }
+    
+    DriverInfo.setHolidaysTaken(currentUserId,
+            holidayLength+DriverInfo.getHolidaysTaken(currentUserId));
+    println("Your holidays have been approved!");
+    
+    return true;
+  }  
+  
+  private static Date chooseDate(boolean endDate, Date start, Date end) {
+    println("Enter "+(endDate ? "end" : "start")+" date (YYYY-MM-DD) :");
+    String givenDate = readLine();
+
+    try {
+      if(endDate)
+        end = (Date)dateFormat.parse(givenDate);
+      else
+        start = (Date)dateFormat.parse(givenDate);
+      
+      if(start != null&&end != null) {
+        if(!(start.before(end))) {
+          if(endDate)
+            println("The start date should be before the end date!");
+          else
+            println("The end date should be after the start date!");
+          println("Please choose again... ");
+          return null;
+        } //if
+      } // if
+    }
+    catch (ParseException e) {
+        System.out.println("Invalid date");
+        return null;
+    } // catch
+    
+    //If we got here the date is valid
+    if(endDate)
+      return end;
+    else
+      return start;
+  }
+  
   /**
    * Process for requesting a holiday
    */
   private static void requestHoliday(int currentUserId) {
     //read start date 0 - validate etc...
         //read end date - validate etc…
-        //complete - calclate holiday lenth
-          //check holiday legth + current holidays not bigger than toal holidays
-          //check their are are enough drivers over the period
-            //10?
-          //mark holiday taken 
+        //complete
         //exit
-    throw new UnsupportedOperationException("Not yet implemented");
-  }
+    boolean requestHolidayDone = false;
+    do {
+      Date start = null;
+      Date end = null; 
+
+      println("Current request:");
+      print("\tHoliday from "+(start==null ? "-" : dateFormat.format(start))+"");
+      println("\tto "+(end==null ? "-" : dateFormat.format(end))+".\n");
+      
+      println("Please choose your option:");
+      
+      println("\t1: Select start date");
+      println("\t2: Select end date");
+      println("\t3: Submit holiday request");
+      println("\t0: Cancel request");
+
+      try {
+        //Read user input
+          String userInput = readLine();
+          println(" "); //just be tidy
+          int userOption = Integer.parseInt(userInput);
+
+        //Switch on request
+          switch(userOption) {
+              case 1: //choose start date
+                  start = chooseDate(false, start, end);
+                  break;
+              case 2: //choose end date
+                  end = chooseDate(true, start, end);
+                  break;
+              case 3: //submit request
+                  requestHolidayDone = submitHolidayRequest(currentUserId, start, end);
+                  break;
+              case 0: //exit
+                  println("Returning to the main menu!\n");
+                  requestHolidayDone = true;
+                  break;
+              default:
+                  println("That isn't a valid option, please try again!\n");
+          }
+
+      }
+      catch(NumberFormatException e) {
+          println("You can only enter a number here...\n");
+      }
+      
+    } while (!requestHolidayDone); 
+  } //requestHoliday
   
   /**
    * Display the amount of days of holiday
    */
-  private static void displayHolidaysLeft(int currentUserId) {
-    throw new UnsupportedOperationException("Not yet implemented");
+  private static void displayHolidaysLeft(int driverID) {
+    println("You have " + (maxHolidays - DriverInfo.getHolidaysTaken(driverID))
+                        + " days remaining\n");
   }
 
   /**
    * Display all current holidays
    */  
   private static void displayHolidays(int currentUserId) {
-    //List all the holidays a driver has taken already
+    try {
+      //List all the holidays a driver has taken already
+      GregorianCalendar gcal = new GregorianCalendar();
+      SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+      Date start = sdf.parse("2010.01.01");
+      Date end = sdf.parse("2010.01.14");
+      gcal.setTime(start);
+      while (gcal.getTime().before(end)) {
+          gcal.add(Calendar.DAY_OF_YEAR, 1);
+          System.out.println( gcal.getTime().toString());
+      }
+    } catch (ParseException ex) {
+      println("That doesn't look like a date?!?");
+    }
     throw new UnsupportedOperationException("Not yet implemented");
   } 
   
@@ -175,7 +329,7 @@ public class RDH {
       }
       while(!gotUser);
       
-      println(" ");
+      println(" "); //just be tidy
       
       boolean done = false;
       do {  
@@ -199,6 +353,7 @@ public class RDH {
         try {
           //Read user input
             String userInput = readLine();
+            println(" "); //just be tidy
             int userOption = Integer.parseInt(userInput);
             
           //Switch on request
@@ -215,6 +370,9 @@ public class RDH {
                 case 0: //exit
                     println("\nYou are now logged out!");
                     done = true;
+                    break;
+                default:
+                    println("That isn't a valid option, please try again!\n");
             }
  
         }
