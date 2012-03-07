@@ -207,9 +207,9 @@ public class RDH {
         //complete
         //exit
     boolean requestHolidayDone = false;
+    Date start = null;
+    Date end = null;
     do {
-      Date start = null;
-      Date end = null; 
 
       println("Current request:");
       print("\tHoliday from "+(start==null ? "-" : dateFormat.format(start))+"");
@@ -281,7 +281,7 @@ public class RDH {
     } catch (ParseException ex) {
       println("That doesn't look like a date?!?");
     }
-    throw new UnsupportedOperationException("Not yet implemented");
+    //throw new UnsupportedOperationException("Not yet implemented");
   } 
   
   /**
