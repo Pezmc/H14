@@ -91,12 +91,21 @@ public class RDH {
       System.out.println("Error with STD IN"); 
       System.exit(1);
     }
+    return string;
+  }
   
   /**
    * Print out information to the user (alias)
    */
   private static void println(String message) {
     System.out.println(message);
+  }
+
+  /**
+   * Print out information to the user (alias)
+   */
+  private static void print(String message) {
+    System.out.print(message);
   }
   
   private static boolean submitHolidayRequest(int currentUserId, Date start, Date end) {

@@ -6,7 +6,6 @@ package ibms;
  * @author John Sargeant
  */
 public class IBMS {
-/* testing git */
     /**
      * @param args the command line arguments
      */
