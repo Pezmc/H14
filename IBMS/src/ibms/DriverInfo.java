@@ -23,24 +23,24 @@ import java.text.*;
  */
 public class DriverInfo 
 {
-    public static int getNoOfUnavailableDrivers(Date i) {
-        if (i == null) throw new InvalidQueryException("Date is null.");
+  public static int getNoOfUnavailableDrivers(Date i) {
+      if (i == null) throw new InvalidQueryException("Date is null.");
         
-        database db = database.busDatabase;
-        DateFormat format = new SimpleDateFormat("dd-mm-yyyy");
+      database db = database.busDatabase;
+      DateFormat format = new SimpleDateFormat("dd-mm-yyyy");
 
-        return db.getResult("driver_availability",  "day = '" + format.format(i) + "'");
-    }
+      return db.getResult("driver_availability",  "day = '" + format.format(i) + "'");
+  }
 
-    public static int getTotalDrivers() {
-        database db = database.busDatabase;
-        return db.getResult("driver", null);
-    }
+  public static int getTotalDrivers() {
+      database db = database.busDatabase;
+      return db.getResult("driver", null);
+  }
 
-    public static ArrayList getUnavailableDates(int driversID) {
-        database db = database.busDatabase;
-        return db.getResult("day", "driver_availability", "driver = '" + driversID + "' and available = '0'");
-    }
+  public static ArrayList getUnavailableDates(int driversID) {
+      database db = database.busDatabase;
+      return db.getResult("day", "driver_availability", "driver = '" + driversID + "' and available = '0'");
+  }
   
   // This class is not intended to be instantiated
   private DriverInfo() 
