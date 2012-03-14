@@ -1,6 +1,9 @@
 package ibms;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,6 +43,8 @@ public class Roster
       generateRoster();
     } catch (InterruptedException ex) {
       Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
+    } catch (Exception ex) {
+      System.out.println("Something went wrong: "+ex.getMessage());
     }
   }
   //read input
@@ -47,7 +52,7 @@ public class Roster
   //array lists to store info
 
   //generate roster
-  public static String generateRoster() throws InterruptedException {
+  public static String generateRoster() throws InterruptedException, Exception {
     //opendb
     database.openBusDatabase();
 
@@ -73,9 +78,18 @@ public class Roster
     //for every day 0-6
     int dayOfWeek = 0;
     for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) { //do can we skip these?
+      debug("================================================================");
+      debug("===========Looking at new day "+dayOfWeek);
+      debug("================================================================");
+
       //set the times to zero for each day
-      for (Driver driver : drivers)
+      for (Driver driver : drivers) {
         driver.setMinutesThisDay(0);
+        if(driver.getTimeAtStation()>1440)
+          driver.setTimeAtStation(driver.getTimeAtStation()-1440);
+        else //it's a new day
+          driver.setTimeAtStation(-1);
+      }
       
       //reset busses
 
@@ -93,11 +107,16 @@ public class Roster
 
       //create array lists that are empty
       int[] routeList = BusStopInfo.getRoutes();
+      //System.out.println("Route "+routeNo);
 
       //for every route
       int routeNo;
       for(routeNo = 0; routeNo < routeList.length; routeNo++) {
-        debug("Looking at route "+routeNo);
+        debug("========================================================");
+        debug("===========Looking at route "+routeNo+":"+routeList[routeNo]);
+        debug("========================================================");
+        //65, 66, 67, 68
+        if(routeList[routeNo]>66) continue; ////////////////////ONLY DO 66 ATM
         //empty the slots/busSlots
 
         //get a list of bus stops on this route
@@ -109,57 +128,73 @@ public class Roster
         //for every service
         int serviceNo;
         for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
-           debug("Looking at service "+serviceNo+" "+services[serviceNo]);
+           debug("========================================");
+           debug("=======Looking at service "+serviceNo+" "+services[serviceNo]);
+           debug("========================================");
            
            //get the list of times
            int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
            
-           /*for(int service : serviceTimes) {
-             System.out.println("\tService time"+service+"\n");
-           }*/
+           for(int service : serviceTimes) {
+             System.out.println("\tService time: "+Util.minToTime(service));
+           }
 
            //get route duration
            int serviceLength;
            int end = serviceTimes[serviceTimes.length-1];
            int start = serviceTimes[0];
-           if(end>start)
-             serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
-           else
-             serviceLength = serviceTimes[serviceTimes.length-1]+1440-serviceTimes[0];
+           if(end<start)
+             end = serviceTimes[serviceTimes.length-1]+1440;
+           serviceLength = end - serviceTimes[0];
+             
            
            //Just in case, for error checking
            if(serviceLength<=0) {
              throw new NumberFormatException("The service has a negative time? "
                      + "Length" + serviceLength + " Service "+serviceNo
                      + " Service "+services[serviceNo]
-                     + "Service length "+serviceTimes[serviceTimes.length-1]+"-"+serviceTimes[0]);
+                     + "Service length "+end+"-"+start);
            }
            
            Driver chosenDriver = null;
 
+           Collections.sort(drivers);
+           /*for(Driver driver : drivers)
+             System.out.println("Driver: "+driver.getMinutesThisDay()+" "+driver);*/
+
+           int driverId = 0;
            //find a driver that we are allowed to choose
            do {
-             Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
+             //Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
+             Driver randomDriver = drivers.get(driverId);
 
              debug("Looking at driver "+randomDriver);
 
              //if the drivers hours don't exceed the max
                 //and he is back and he is available
              if(randomDriver.checkAddMinutes(serviceLength)
-                     &&randomDriver.checkStartTime(serviceTimes[0]))
+                     &&randomDriver.checkStartTime(start))
                chosenDriver = randomDriver;
 
-             Thread.sleep(1000);
+             driverId++;
+             //Thread.sleep(10);
            }
-           while(chosenDriver==null);
+           while(chosenDriver==null&&driverId<drivers.size());
+
+           if(chosenDriver==null) {
+             throw new Exception("I couldn't find a driver for service "
+                     +serviceNo+" "+services[serviceNo]+" :-(");
+           }
 
            //Add the hours to the driver
            chosenDriver.addMinutesThisDay(serviceLength);
 
            //Update the drivers end time
-           chosenDriver.setEndTime(serviceTimes[serviceTimes.length-1]);
+           chosenDriver.setEndTime(end);
 
-           System.out.println("Driver "+chosenDriver+ " was chosen");
+           System.out.println("==Chose driver "+chosenDriver+ " for service "
+                   + services[serviceNo]+" Time: "+start+"->"
+                   +end);
 
            //Add this route to our list...
             /////////////
@@ -180,8 +215,14 @@ public class Roster
                 //get list of services
                 //for every service
                     //print route, service, driver, bus
-      throw new UnsupportedOperationException("Just pseudo code atm...");
+      //throw new UnsupportedOperationException("Just pseudo code atm...");
+    return "";
   }
+
+  /*private static void writeLog()
+    FileWriter fs = new FileWriter("log");
+    BufferedWriter out = new BufferedWriter(fs);
+  );*/
 
   private static void debug(String message) {
     System.out.println(message);

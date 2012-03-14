@@ -5,11 +5,13 @@
 
 package ibms;
 
+import java.util.ArrayList;
+
 /**
  * This class represents an instance of a driver
  * @author cuckowp0
  */
-class Driver {
+class Driver implements Comparable {
   private static int[] drivers = DriverInfo.getDrivers();
   private static int MAX_DAY_HOURS = 10;
   private static int MAX_WEEK_HOURS = 50;
@@ -19,6 +21,7 @@ class Driver {
   private int minutesWeek = 0;
   private int minutesDay = 0;
   private int timeAtStation = -1;
+  private ArrayList<int[]> hours = new ArrayList<int[]>();
   private String name = "";
 
 
@@ -72,7 +75,7 @@ class Driver {
   /**
    * Set how many minutes they have worked "today"
    */
-  public int getminutesThisDay() {
+  public int getMinutesThisDay() {
     return minutesDay;
   }
 
@@ -95,7 +98,9 @@ class Driver {
    * Set how many hours they have worked "today"
    */
   public boolean checkAddMinutes(int minutes) {
-    System.out.println("Minutes trying to add "+minutes+" : "+(minutesDay+minutes)+" minutes:"+(minutesWeek+minutes));
+    /*System.out.println("Minutes trying to add "+minutes+" compar: "
+                       +(minutesDay+minutes)+"<="+(MAX_DAY_HOURS*60)+"&&"+
+                       (minutesWeek+minutes)+"<="+(MAX_WEEK_HOURS*60));*/
     return minutesDay+minutes<=(MAX_DAY_HOURS*60)
             &&minutesWeek+minutes<=(MAX_WEEK_HOURS*60);
   }
@@ -120,6 +125,7 @@ class Driver {
    * @return whether a valid time
    */
   boolean checkStartTime(int startTime) {
+    System.out.println("Time "+Util.minToTime(startTime)+">="+Util.minToTime(timeAtStation));
     return startTime>=timeAtStation;
   }
 
@@ -132,8 +138,38 @@ class Driver {
     setTimeAtStation(time + BREAK_TIME_HOURS * 60);
   }
 
+  void addShift(int start, int end) {
+    int[] time = null;
+    time[0] = start;
+    time[1] = end;
+    hours.add(time);
+  }
+
+  public boolean checkShift(int start, int end) {
+    for(int[] shift : hours) {
+      //end during other shift...
+      if(end>shift[0]&&shift[1]>end)
+        return false;
+      //////////////shift[0]
+      ////////////////////////////////////////
+      /////////////////////////////////////////
+      ////////////////////////////////////////////
+      /////////////////////////////////////////////
+      /////////////////////////////////////////////////////////////////////////
+    }
+    return true;
+  }
+
   @Override
   public String toString() {
     return getName()+":"+getId();
+  }
+
+  @Override
+  public int compareTo(Object otherDriver) {
+    if (!(otherDriver instanceof Driver))
+      throw new ClassCastException("A driver object expected.");
+    int other = ((Driver) otherDriver).getMinutesThisDay();
+    return this.getMinutesThisDay() - other;
   }
 }
