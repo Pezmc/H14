@@ -2,9 +2,7 @@ package ibms;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Random;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,18 +36,96 @@ import java.util.logging.Logger;
 
 public class Roster
 {
-  public static void main(String[] args) {
+  //Three dimensional array on DOW, ROUTE, SERVICE
+  public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
+  //public static ArrayList<ArrayList<ArrayList<Driver>>> driverTimes = new ArrayList<ArrayList<ArrayList<Driver>>>();
+  //public static ArrayList<ArrayList<ArrayList<Bus>>> busTimes = new ArrayList<ArrayList<ArrayList<Bus>>>();  
+  
+  public static void main(String[] args) throws Exception {
     try {
       generateRoster();
+      printRoster();
     } catch (InterruptedException ex) {
       Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
-    } catch (Exception ex) {
+    } /*catch (Exception ex) {
       System.out.println("Something went wrong: "+ex.getMessage());
-    }
+      System.out.println(ex);
+    }*/
   }
   //read input
 
   //array lists to store info
+
+  public static void printRoster() {
+    //for every day 0-6
+    int dayOfWeek = 0;
+    for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
+      System.out.print("========================");
+      switch(dayOfWeek) {
+        case 0: System.out.print("Monday"); break;
+        case 1: System.out.print("Tuesday"); break;
+        case 2: System.out.print("Wednesday"); break;
+        case 3: System.out.print("Thrsday"); break;
+        case 4: System.out.print("Friday"); break;
+        case 5: System.out.print("Saturday"); break;
+        case 6: System.out.print("Sunday"); break;
+        default:
+          throw new IllegalArgumentException("The day of the week "
+                                             + dayOfWeek + " doesn't exist!");
+      }
+      System.out.println("========================");
+
+      //switch on day to get kind (week/sat/sun)
+      TimetableInfo.timetableKind dayType;
+      if(dayOfWeek<=4) //week day
+          dayType = TimetableInfo.timetableKind.weekday;
+      else if(dayOfWeek==5) //sat
+          dayType = TimetableInfo.timetableKind.saturday;
+      else if(dayOfWeek==6) //sun
+          dayType = TimetableInfo.timetableKind.sunday;
+      else
+          throw new IllegalArgumentException("The day of the week "
+                                             + dayOfWeek + " doesn't exist!");
+
+      //create array lists that are empty
+      int[] routeList = BusStopInfo.getRoutes();
+
+      //for every route
+      int routeNo;
+      for(routeNo = 0; routeNo < routeList.length; routeNo++) {
+        System.out.println("============Route "+routeList[routeNo]+"============");
+
+        //get a list of bus stops on this route
+        int[] busStops = BusStopInfo.getBusStops(routeList[routeNo]);
+
+        //get a list of services on this route
+        int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
+
+        //for every service
+        int serviceNo;
+        for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
+          int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
+          
+          System.out.println("Route/Service: "+routeList[routeNo]+"/"+services[serviceNo]);
+          System.out.println("Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
+          System.out.println("Start: "+Util.minToTime(serviceTimes[0])
+                              +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
+           
+           //get the list of times
+           
+        } //end for every service
+      } //end for every route
+    } //end for every day
+  }
+    
+     //For every day from 0-7
+        //print mon-sun
+        //switch on day kind
+            //for each route
+                //get list of services
+                //for every service
+                    //print route, service, driver, bus
+      //throw new UnsupportedOperationException("Just pseudo code atm...");
 
   //generate roster
   public static String generateRoster() throws InterruptedException, Exception {
@@ -81,6 +157,8 @@ public class Roster
       debug("================================================================");
       debug("===========Looking at new day "+dayOfWeek);
       debug("================================================================");
+      
+      driverTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Driver>>());
 
       //set the times to zero for each day
       for (Driver driver : drivers) {
@@ -112,6 +190,9 @@ public class Roster
         debug("========================================================");
         debug("===========Looking at route "+routeNo+":"+routeList[routeNo]);
         debug("========================================================");
+        
+        driverTimes.get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Driver>());
+        
         //65, 66, 67, 68
         //if(routeList[routeNo]>66) continue; ////////////////////ONLY DO 66 ATM
         //empty the slots/busSlots
@@ -189,6 +270,8 @@ public class Roster
            //Update the drivers end time
            chosenDriver.addShift(start, end);
 
+           driverTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
+           
            System.out.println("==Chose driver "+chosenDriver+ " for service "
                    + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
                    +Util.minToTime(end));
@@ -200,19 +283,9 @@ public class Roster
              //while we haven't allocated a bus
                 //calculate bus back time
                     //if the bus available mark it as used
-       } //end for every service
-     } //end for every route
-   } //end for every day
-     
-
-     //For every day from 0-7
-        //print mon-sun
-        //switch on day kind
-            //for each route
-                //get list of services
-                //for every service
-                    //print route, service, driver, bus
-      //throw new UnsupportedOperationException("Just pseudo code atm...");
+        } //end for every service
+      } //end for every route
+    } //end for every day
     return "";
   }
 
