@@ -13,11 +13,13 @@ class Driver {
   private static int[] drivers = DriverInfo.getDrivers();
   private static int MAX_DAY_HOURS = 10;
   private static int MAX_WEEK_HOURS = 50;
+  private static int BREAK_TIME_HOURS = 1;
 
   private int driverId = -1;
-  private int hoursWeek = 0;
-  private int hoursDay = 0;
-  private int timeAtStation = 0;
+  private int minutesWeek = 0;
+  private int minutesDay = 0;
+  private int timeAtStation = -1;
+  private String name = "";
 
 
   /* Reference by driver id */
@@ -31,53 +33,71 @@ class Driver {
 
     if(driverId==-1)
        throw new IllegalArgumentException("Driver id "+id+" doesn't exist");
+
+    //Update name
+    name = DriverInfo.getName(driverId);
+  }
+
+  /**
+   * Get the name of the driver
+   * @return name
+   */
+  public String getName() {
+    return name;
+  }
+
+  /**
+   * Get the id of the driver
+   * @return id
+   */
+  public int getId() {
+    return driverId;
   }
 
   /**
    * Set how many hours they have worked "today"
    */
-  public int getHoursThisWeek() {
-    return hoursWeek;
+  public int getMinutesThisWeek() {
+    return minutesWeek;
   }
 
   /**
-   * Set how many hours they have worked
+   * Set how many minutes they have worked
    */
-  public void setHoursThisWeek(int hours) {
-    hoursWeek = hours;
+  public void setMinutesThisWeek(int minutes) {
+    minutesWeek = minutes;
     //DriverInfo.setHoursThisWeek(driverId, hours);
   }
 
   /**
-   * Set how many hours they have worked "today"
+   * Set how many minutes they have worked "today"
    */
-  public int getHoursThisDay() {
-    return hoursDay;
+  public int getminutesThisDay() {
+    return minutesDay;
   }
 
   /**
    * Set how many hours they have worked "today"
    */
-  public void setHoursThisDay(int hours) {
-    hoursDay = hours;
+  public void setMinutesThisDay(int minutes) {
+    minutesDay = minutes;
   }
 
   /**
    * Set how many hours they have worked "today"
    */
-  public void addHoursThisDay(int hours) {
-    hoursWeek += hours;
-    hoursDay += hours;
+  public void addMinutesThisDay(int minutes) {
+    minutesWeek += minutes;
+    minutesDay += minutes;
   }
-
 
   /**
    * Set how many hours they have worked "today"
    */
-  public boolean checkAddHours(int hours) {
-    hoursWeek += hours;
-    hoursDay += hours;
-    return hoursDay+hours<=MAX_DAY_HOURS&&hoursWeek+hours<=MAX_WEEK_HOURS;
+  public boolean checkAddMinutes(int minutes) {
+    System.out.println("Minutes "+minutesDay+minutes+" minutes:"+minutesWeek+minutes);
+    return minutesDay+minutes<=(MAX_DAY_HOURS*60)
+            &&minutesWeek+minutes<=(MAX_WEEK_HOURS*60);
   }
 
   /**
@@ -90,8 +110,30 @@ class Driver {
   /**
    * Get time back at station (when free again)
    */
-  public int setTimeAtStation(int time) {
+  public void setTimeAtStation(int time) {
     timeAtStation = time;
   }
 
+  /**
+   * Are they allowed to be there at this time
+   * @param startTime
+   * @return whether a valid time
+   */
+  boolean checkStartTime(int startTime) {
+    return startTime>=timeAtStation;
+  }
+
+  /**
+   * Set the time the driver will be back
+   * automatically allocated break time
+   * @param time
+   */
+  void setEndTime(int time) {
+    setTimeAtStation(time + BREAK_TIME_HOURS * 60);
+  }
+
+  @Override
+  public String toString() {
+    return getName()+":"+getId();
+  }
 }

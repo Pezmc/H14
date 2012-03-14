@@ -2,6 +2,8 @@ package ibms;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,13 +35,19 @@ import java.util.Random;
 
 public class Roster
 {
-
+  public static void main(String[] args) {
+    try {
+      generateRoster();
+    } catch (InterruptedException ex) {
+      Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
+    }
+  }
   //read input
 
   //array lists to store info
 
   //generate roster
-  public static String generateRoster() {
+  public static String generateRoster() throws InterruptedException {
     //opendb
     database.openBusDatabase();
 
@@ -66,6 +74,9 @@ public class Roster
     int dayOfWeek = 0;
     for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) { //do can we skip these?
       //set the times to zero for each day
+      for (Driver driver : drivers)
+        driver.setMinutesThisDay(0);
+      
       //reset busses
 
       //switch on day to get kind (week/sat/sun)
@@ -86,54 +97,63 @@ public class Roster
       //for every route
       int routeNo;
       for(routeNo = 0; routeNo < routeList.length; routeNo++) {
-          //empty the slots/busSlots
+        debug("Looking at route "+routeNo);
+        //empty the slots/busSlots
 
-          //get a list of bus stops on this route
-          int[] busStops = BusStopInfo.getBusStops(routeList[routeNo]);
+        //get a list of bus stops on this route
+        int[] busStops = BusStopInfo.getBusStops(routeList[routeNo]);
 
-          //get a list of services on this route
-          int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
+        //get a list of services on this route
+        int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
 
-          //for every service
-          int serviceNo;
-          for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
-             //get the list of times
-             int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,services[serviceNo]);
+        //for every service
+        int serviceNo;
+        for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
+           debug("Looking at service "+serviceNo);
+           
+           //get the list of times
+           int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
 
-             //get route duration
-             int serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
+           //get route duration
+           int serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
+           debug("Service length "+serviceLength);
 
-             Driver chosenDriver = null;
+           Driver chosenDriver = null;
 
-             //find a driver that we are allowed to choose
-             do {
-               Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
+           //find a driver that we are allowed to choose
+           do {
+             Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
 
-               //if the drivers hours don't exceed the max
-                  //and he is back and he is available
-               if(randomDriver(checkAddHours(serviceLength)))
-                 chosenDriver = randomDriver;
-                 //while we haven't allocated a driver
-                    //calculate hours this week and day
-                        
+             debug("Looking at driver "+randomDriver);
 
-                            //add this route
-                            //update hourly week/day
+             //if the drivers hours don't exceed the max
+                //and he is back and he is available
+             if(randomDriver.checkAddMinutes(serviceLength)
+                     &&randomDriver.checkStartTime(serviceTimes[0]))
+               chosenDriver = randomDriver;
 
-             }
-             while(chosenDriver==null);
+             Thread.sleep(1000);
+           }
+           while(chosenDriver==null);
 
-             //Add the hours to the driver
-             chosenDriver.addHoursThisDay(serviceLength);
-             
+           //Add the hours to the driver
+           chosenDriver.addMinutesThisDay(serviceLength);
+
+           //Update the drivers end time
+           chosenDriver.setEndTime(serviceTimes[serviceTimes.length-1]);
+
+           System.out.println("Driver "+chosenDriver+ " was chosen");
+
+           //Add this route to our list...
+            /////////////
 
 
-               //while we haven't allocated a bus
-                  //calculate bus back time
-                      //if the bus available mark it as used
-         } //end for every service
-       } //end for every route
-     } //end for every day
+             //while we haven't allocated a bus
+                //calculate bus back time
+                    //if the bus available mark it as used
+       } //end for every service
+     } //end for every route
+   } //end for every day
      
 
      //For every day from 0-7
@@ -144,5 +164,9 @@ public class Roster
                 //for every service
                     //print route, service, driver, bus
       throw new UnsupportedOperationException("Just pseudo code atm...");
-    }
+  }
+
+  private static void debug(String message) {
+    System.out.println(message);
+  }
 }
