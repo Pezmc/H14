@@ -1,5 +1,7 @@
 package ibms;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author cuckowp0
@@ -43,12 +45,19 @@ public class Roster
     //lists of drivers and busses
     int[] busIds = BusInfo.getBuses();
     int[] driverIds = DriverInfo.getDrivers();
+    ArrayList<Driver> drivers = new ArrayList<Driver>();
 
     //for every driver
     int i;
     for(i = 0; i < driverIds.length; i++) {
-       //reset driver hours to zero
-       DriverInfo.setHoursThisWeek(driverIds[i], 0);      
+       //new driver
+       Driver driver = new Driver(driverIds[i]);
+
+       //Empty
+       driver.setHoursThisWeek(0);
+
+       //Add to our list
+       drivers.add(driver);
        //store duration of routes
     }
 
@@ -60,11 +69,11 @@ public class Roster
 
       //switch on day to get kind (week/sat/sun)
       TimetableInfo.timetableKind dayType;
-      if(dayOfWeek<=4)
+      if(dayOfWeek<=4) //week day
           dayType = TimetableInfo.timetableKind.weekday;
-      else if(dayOfWeek==5)
+      else if(dayOfWeek==5) //sat
           dayType = TimetableInfo.timetableKind.saturday;
-      else if(dayOfWeek==6)
+      else if(dayOfWeek==6) //sun
           dayType = TimetableInfo.timetableKind.sunday;
       else
           throw new IllegalArgumentException("The day of the week "
@@ -85,9 +94,13 @@ public class Roster
           int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
 
           //for every service
+          int serviceNo;
+          for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
              //get the list of times
+             int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,services[serviceNo]);
 
              //get route duration
+             int serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
 
                //while we haven't allocated a driver
                   //calculate hours this week and day
@@ -99,7 +112,7 @@ public class Roster
                //while we haven't allocated a bus
                   //calculate bus back time
                       //if the bus available mark it as used
-          //end for every service
+         } //end for every service
        } //end for every route
      } //end for every day
      

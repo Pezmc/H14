@@ -101,7 +101,7 @@ public class SingleRosterOLD
        // Day range: 0-6 (Mon-Sun)
        int day = 0;
        //routeServicesDuration.add(new ArrayList<Integer>());
-       TimetableInfo.timetableKind kind;
+       TimetableInfo.timetableKind.weekday;
        while( day < 7) // change to <7 to include sat/sun
        {
          // SET daily/isBack times of all drivers to 0
