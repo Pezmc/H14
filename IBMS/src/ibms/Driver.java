@@ -108,56 +108,119 @@ class Driver implements Comparable {
   /**
    * Get hours at station
    */
-  public int getTimeAtStation() {
+  /*public int getTimeAtStation() {
     return timeAtStation;
-  }
+  }*/
 
   /**
    * Get time back at station (when free again)
    */
-  public void setTimeAtStation(int time) {
+  /*public void setTimeAtStation(int time) {
     timeAtStation = time;
-  }
+  }*/
 
   /**
    * Are they allowed to be there at this time
    * @param startTime
    * @return whether a valid time
    */
-  boolean checkStartTime(int startTime) {
+  /*boolean checkStartTime(int startTime) {
     System.out.println("Time "+Util.minToTime(startTime)+">="+Util.minToTime(timeAtStation));
     return startTime>=timeAtStation;
-  }
+  }*/
 
   /**
    * Set the time the driver will be back
    * automatically allocated break time
    * @param time
    */
-  void setEndTime(int time) {
+  /*void setEndTime(int time) {
     setTimeAtStation(time + BREAK_TIME_HOURS * 60);
-  }
+  }*/
 
+  /**
+   * Add a shift to the driver
+   * @param start Start of the shift in mins past midnight
+   * @param end End of the shift in mins past midnight 
+   */
   void addShift(int start, int end) {
-    int[] time = null;
+    int[] time = new int[2];
     time[0] = start;
     time[1] = end;
     hours.add(time);
   }
 
+  /**
+   * Check whether the driver is allowed to do another shift today
+   * @param start when the shift would start
+   * @param end when the shift would end
+   * @return boolean true/false whether driver can work
+   */
   public boolean checkShift(int start, int end) {
+    return checkShift(start, end, BREAK_TIME_HOURS*60);
+  }
+  
+  /**
+   * Check whether the driver is allowed to do another shift today
+   * @param start when the shift would start
+   * @param end when the shift would end
+   * @param margin required margin (mins)
+   * @return boolean true/false whether driver can work
+   */ 
+  public boolean checkShift(int start, int end, int margin) {
     for(int[] shift : hours) {
       //end during other shift...
-      if(end>shift[0]&&shift[1]>end)
+      //if the start - end and the end - start are both possitive
+      //  or they are both negative then it is on either side
+      //  so if NOT return false
+      if(!(shift[0]-end>margin&&shift[1]-start>margin
+              ||shift[0]-end<-margin&&shift[1]-start<-margin)) {
         return false;
-      //////////////shift[0]
-      ////////////////////////////////////////
-      /////////////////////////////////////////
-      ////////////////////////////////////////////
-      /////////////////////////////////////////////
-      /////////////////////////////////////////////////////////////////////////
+      }
     }
     return true;
+  }
+  
+  /**
+   * Delete all the shifts a driver has done
+   */
+  public void clearShifts() {
+    hours = new ArrayList<int[]>();
+  }
+  
+   
+  /**
+   * Move all the shifts forwards a day (mostly delete them)
+   */
+  public void nextDayShifts() {
+    int i;
+    for(i = 0; i < hours.size(); i++) {
+      //System.out.println("for"+i);
+      int[] shift = hours.get(i);
+      if(shift[0]<1440&&shift[1]<1440) {
+        //System.out.println("Delete "+i);
+        hours.remove(i); //remove
+        i--; //cope with shrinking array
+      } else {
+        if(shift[0]>=1440) shift[0] -= 1440;
+        else shift[0] = 0;
+        //System.out.println("ShiftStart: "+shift[0]);
+        
+        if(shift[1]>=1440) shift[1] -= 1440;
+        //System.out.println("ShiftEnd: "+shift[1]);
+        hours.set(i, shift); //update
+      }
+    }
+  }
+  
+  /**
+   * Print out all the shifts a driver has...
+   */
+  public void printShifts() {
+    for(int[] shift : hours) {
+      System.out.println("Start: "+Util.minToTime(shift[0])
+                         + " End: "+Util.minToTime(shift[1]));
+    }
   }
 
   @Override

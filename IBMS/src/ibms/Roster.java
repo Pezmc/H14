@@ -85,10 +85,7 @@ public class Roster
       //set the times to zero for each day
       for (Driver driver : drivers) {
         driver.setMinutesThisDay(0);
-        if(driver.getTimeAtStation()>1440)
-          driver.setTimeAtStation(driver.getTimeAtStation()-1440);
-        else //it's a new day
-          driver.setTimeAtStation(-1);
+        driver.nextDayShifts();
       }
       
       //reset busses
@@ -116,7 +113,7 @@ public class Roster
         debug("===========Looking at route "+routeNo+":"+routeList[routeNo]);
         debug("========================================================");
         //65, 66, 67, 68
-        if(routeList[routeNo]>66) continue; ////////////////////ONLY DO 66 ATM
+        //if(routeList[routeNo]>66) continue; ////////////////////ONLY DO 66 ATM
         //empty the slots/busSlots
 
         //get a list of bus stops on this route
@@ -135,9 +132,9 @@ public class Roster
            //get the list of times
            int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
            
-           for(int service : serviceTimes) {
+           /*for(int service : serviceTimes) {
              System.out.println("\tService time: "+Util.minToTime(service));
-           }
+           }*/
 
            //get route duration
            int serviceLength;
@@ -168,12 +165,12 @@ public class Roster
              //Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
              Driver randomDriver = drivers.get(driverId);
 
-             debug("Looking at driver "+randomDriver);
+             //debug("Looking at driver "+randomDriver);
 
              //if the drivers hours don't exceed the max
                 //and he is back and he is available
              if(randomDriver.checkAddMinutes(serviceLength)
-                     &&randomDriver.checkStartTime(start))
+                     &&randomDriver.checkShift(start, end))
                chosenDriver = randomDriver;
 
              driverId++;
@@ -190,11 +187,11 @@ public class Roster
            chosenDriver.addMinutesThisDay(serviceLength);
 
            //Update the drivers end time
-           chosenDriver.setEndTime(end);
+           chosenDriver.addShift(start, end);
 
            System.out.println("==Chose driver "+chosenDriver+ " for service "
-                   + services[serviceNo]+" Time: "+start+"->"
-                   +end);
+                   + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
+                   +Util.minToTime(end));
 
            //Add this route to our list...
             /////////////
