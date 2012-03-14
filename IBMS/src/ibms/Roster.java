@@ -38,7 +38,6 @@ public class Roster
 {
   //Three dimensional array on DOW, ROUTE, SERVICE
   public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
-  //public static ArrayList<ArrayList<ArrayList<Driver>>> driverTimes = new ArrayList<ArrayList<ArrayList<Driver>>>();
   //public static ArrayList<ArrayList<ArrayList<Bus>>> busTimes = new ArrayList<ArrayList<ArrayList<Bus>>>();  
   
   public static void main(String[] args) throws Exception {
