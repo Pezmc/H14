@@ -44,6 +44,7 @@ public class Roster
     try {
       generateRoster();
       printRoster();
+      printDriverHours();
     } catch (InterruptedException ex) {
       Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
     } /*catch (Exception ex) {
