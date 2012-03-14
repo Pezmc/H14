@@ -12,7 +12,10 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/* This class needs */
+/**
+ *
+ * @author cuckowp0
+ */
 
 /*
  
@@ -119,7 +122,7 @@ public class RDH {
       System.out.println("Please choose a start and an end first!");
       return false;
     }
-       
+    
     //calclate holiday lenth
     int holidayLength = distanceBetweenDates(start, end);
     
