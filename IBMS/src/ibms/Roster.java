@@ -117,15 +117,6 @@ public class Roster
       } //end for every route
     } //end for every day
   }
-    
-     //For every day from 0-7
-        //print mon-sun
-        //switch on day kind
-            //for each route
-                //get list of services
-                //for every service
-                    //print route, service, driver, bus
-      //throw new UnsupportedOperationException("Just pseudo code atm...");
 
   //generate roster
   public static String generateRoster() throws InterruptedException, Exception {
@@ -236,9 +227,11 @@ public class Roster
            
            Driver chosenDriver = null;
 
+           //Sort all the drivers by hours this day
            Collections.sort(drivers);
-           /*for(Driver driver : drivers)
-             System.out.println("Driver: "+driver.getMinutesThisDay()+" "+driver);*/
+           
+           //Reverse so most hours are at the top
+           Collections.reverse(drivers);
 
            int driverId = 0;
            //find a driver that we are allowed to choose
@@ -270,17 +263,15 @@ public class Roster
            //Update the drivers end time
            chosenDriver.addShift(start, end);
 
+           //Store this infomation
            driverTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
+           
            
            System.out.println("==Chose driver "+chosenDriver+ " for service "
                    + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
                    +Util.minToTime(end));
 
-           //Add this route to our list...
-            /////////////
-
-
-             //while we haven't allocated a bus
+              //while we haven't allocated a bus
                 //calculate bus back time
                     //if the bus available mark it as used
         } //end for every service
