@@ -5,6 +5,9 @@
 *.swp
 *.out
 
+# Compiled files
+*.class
+
 # Windows image file caches
 Thumbs.db 
 
