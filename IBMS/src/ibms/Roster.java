@@ -48,43 +48,61 @@ public class Roster
     int i;
     for(i = 0; i < driverIds.length; i++) {
        //reset driver hours to zero
-       DriverInfo.setHoursThisWeek(driverIds[i], 0);
-       
+       DriverInfo.setHoursThisWeek(driverIds[i], 0);      
        //store duration of routes
     }
 
-    //for every day 0-7
-        //set the times to zero for each day
-        //reset busses
+    //for every day 0-6
+    int dayOfWeek = 0;
+    for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) { //do can we skip these?
+      //set the times to zero for each day
+      //reset busses
 
-    //switch on day to get kind (week/sat/sun)
-       //kind = TimetableInfo.timetableKind.weekday;
+      //switch on day to get kind (week/sat/sun)
+      TimetableInfo.timetableKind dayType;
+      if(dayOfWeek<=4)
+          dayType = TimetableInfo.timetableKind.weekday;
+      else if(dayOfWeek==5)
+          dayType = TimetableInfo.timetableKind.saturday;
+      else if(dayOfWeek==6)
+          dayType = TimetableInfo.timetableKind.sunday;
+      else
+          throw new IllegalArgumentException("The day of the week "
+                                             + dayOfWeek + " doesn't exist!");
 
-    //create array lists that are empty
+      //create array lists that are empty
+      int[] routeList = BusStopInfo.getRoutes();
+
       //for every route
-        //empty the slots/busSlots
+      int routeNo;
+      for(routeNo = 0; routeNo < routeList.length; routeNo++) {
+          //empty the slots/busSlots
 
-        //get a list of bus stops on the current day
+          //get a list of bus stops on this route
+          int[] busStops = BusStopInfo.getBusStops(routeList[routeNo]);
 
-        //get a list of services
-        //for every service
-           //get the list of times
+          //get a list of services on this route
+          int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
 
-           //get route duration
+          //for every service
+             //get the list of times
 
-             //while we haven't allocated a driver
-                //calculate hours this week and day
-                    //if the drivers hours don't exceed the max
-                    //and he is back and he is available
-                        //add this route
-                        //update hourly week/day
-                 
-             //while we haven't allocated a bus
-                //calculate bus back time
-                    //if the bus available mark it as used
-        //end for every service
-     //end for every route
+             //get route duration
 
+               //while we haven't allocated a driver
+                  //calculate hours this week and day
+                      //if the drivers hours don't exceed the max
+                      //and he is back and he is available
+                          //add this route
+                          //update hourly week/day
+
+               //while we haven't allocated a bus
+                  //calculate bus back time
+                      //if the bus available mark it as used
+          //end for every service
+       } //end for every route
+     } //end for every day
+     
 
      //For every day from 0-7
         //print mon-sun
