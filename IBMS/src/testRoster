@@ -1,0 +1,5 @@
+git pull
+javac ibms/Roster.java -sourcepath . -classpath ../
+javac ibms/Driver.java -sourcepath . -classpath ../
+javac ibms/DriverInfo.java -sourcepath . -classpath ../
+java -cp .:ibms/:../mysql-connector-java-5.1.12-bin.jar ibms.Roster

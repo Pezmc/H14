@@ -110,6 +110,7 @@ public class Roster
           System.out.println("Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
           System.out.println("Start: "+Util.minToTime(serviceTimes[0])
                               +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
+          System.out.println();
            
            //get the list of times
            
