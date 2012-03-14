@@ -54,6 +54,30 @@ public class Roster
   //read input
 
   //array lists to store info
+  public static void printDriverHours() {
+    int[] driverIds = DriverInfo.getDrivers();
+    ArrayList<Driver> drivers = new ArrayList<Driver>();
+
+    //for every driver
+    int i;
+    for(i = 0; i < driverIds.length; i++) {
+       //new driver
+       Driver driver = new Driver(driverIds[i]);
+
+       //Load driver infro from db
+       driver.load();
+       
+       //Add to our list
+       drivers.add(driver);
+       //store duration of routes
+    }
+
+    for(Driver driver : drivers) {
+      System.out.println(""+driver+" Total Week Hours: "+Util.minToTime(driver.getMinutesThisWeek()));
+      System.out.println();
+    }
+    
+  }
 
   public static void printRoster() {
     //for every day 0-6
@@ -277,6 +301,11 @@ public class Roster
         } //end for every service
       } //end for every route
     } //end for every day
+    
+    //Save all our drivers to the DB
+    for(Driver driver : drivers)
+      driver.save();
+    
     return "";
   }
 

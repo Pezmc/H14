@@ -222,6 +222,20 @@ class Driver implements Comparable {
                          + " End: "+Util.minToTime(shift[1]));
     }
   }
+  
+  /**
+   * Write any changes of the driver to the database
+   */
+  public void save() {
+    DriverInfo.setHoursThisWeek(driverId, minutesWeek);
+  }
+  
+  /**
+   * Load information from database rather then using 0
+   */
+  public void load() {
+    minutesWeek = DriverInfo.getHoursThisWeek(driverId);
+  }
 
   @Override
   public String toString() {
