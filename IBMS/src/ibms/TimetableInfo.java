@@ -92,6 +92,7 @@ public class TimetableInfo
    * Get the service times on a given route for a given timetable kind
    * for a particular service. This method along with the methods to
    * get service information can be used to build up a complete timetable
+   * ordered by the timing_point
    */
   public static int[] getServiceTimes(int route, timetableKind kind, int serviceNumber)
   {
@@ -101,7 +102,7 @@ public class TimetableInfo
     if (serviceNumber < 0 || serviceNumber >=  numberOfServices) throw new InvalidQueryException("Invalid service number " + serviceNumber);
     int service = service_ids[serviceNumber];
     String source = database.join("timetable_line", "service", "service");
-    return database.busDatabase.select_ids("time", source, "service", service, "time");
+    return database.busDatabase.select_ids("time", source, "service", service, "timing_point"); //changed this
   }
   
   /**

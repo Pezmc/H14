@@ -109,15 +109,32 @@ public class Roster
         //for every service
         int serviceNo;
         for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
-           debug("Looking at service "+serviceNo);
+           debug("Looking at service "+serviceNo+" "+services[serviceNo]);
            
            //get the list of times
            int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
+           
+           /*for(int service : serviceTimes) {
+             System.out.println("\tService time"+service+"\n");
+           }*/
 
            //get route duration
-           int serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
-           debug("Service length "+serviceLength);
-
+           int serviceLength;
+           int end = serviceTimes[serviceTimes.length-1];
+           int start = serviceTimes[0];
+           if(end>start)
+             serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
+           else
+             serviceLength = serviceTimes[serviceTimes.length-1]+1440-serviceTimes[0];
+           
+           //Just in case, for error checking
+           if(serviceLength<=0) {
+             throw new NumberFormatException("The service has a negative time? "
+                     + "Length" + serviceLength + " Service "+serviceNo
+                     + " Service "+services[serviceNo]
+                     + "Service length "+serviceTimes[serviceTimes.length-1]+"-"+serviceTimes[0]);
+           }
+           
            Driver chosenDriver = null;
 
            //find a driver that we are allowed to choose

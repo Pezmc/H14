@@ -95,7 +95,7 @@ class Driver {
    * Set how many hours they have worked "today"
    */
   public boolean checkAddMinutes(int minutes) {
-    System.out.println("Minutes "+minutesDay+minutes+" minutes:"+minutesWeek+minutes);
+    System.out.println("Minutes trying to add "+minutes+" : "+(minutesDay+minutes)+" minutes:"+(minutesWeek+minutes));
     return minutesDay+minutes<=(MAX_DAY_HOURS*60)
             &&minutesWeek+minutes<=(MAX_WEEK_HOURS*60);
   }
