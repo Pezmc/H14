@@ -1,6 +1,7 @@
 package ibms;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -53,13 +54,13 @@ public class Roster
        //new driver
        Driver driver = new Driver(driverIds[i]);
 
-       //Empty
-       driver.setHoursThisWeek(0);
-
        //Add to our list
        drivers.add(driver);
        //store duration of routes
     }
+
+    //Random numbers
+    Random rand = new Random();
 
     //for every day 0-6
     int dayOfWeek = 0;
@@ -102,12 +103,30 @@ public class Roster
              //get route duration
              int serviceLength = serviceTimes[serviceTimes.length-1]-serviceTimes[0];
 
-               //while we haven't allocated a driver
-                  //calculate hours this week and day
-                      //if the drivers hours don't exceed the max
-                      //and he is back and he is available
-                          //add this route
-                          //update hourly week/day
+             Driver chosenDriver = null;
+
+             //find a driver that we are allowed to choose
+             do {
+               Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
+
+               //if the drivers hours don't exceed the max
+                  //and he is back and he is available
+               if(randomDriver(checkAddHours(serviceLength)))
+                 chosenDriver = randomDriver;
+                 //while we haven't allocated a driver
+                    //calculate hours this week and day
+                        
+
+                            //add this route
+                            //update hourly week/day
+
+             }
+             while(chosenDriver==null);
+
+             //Add the hours to the driver
+             chosenDriver.addHoursThisDay(serviceLength);
+             
+
 
                //while we haven't allocated a bus
                   //calculate bus back time

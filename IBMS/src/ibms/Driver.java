@@ -11,10 +11,14 @@ package ibms;
  */
 class Driver {
   private static int[] drivers = DriverInfo.getDrivers();
+  private static int MAX_DAY_HOURS = 10;
+  private static int MAX_WEEK_HOURS = 50;
 
-  int driverId = -1;
-  int hoursWeek = 0;
-  int hoursDay = 0;
+  private int driverId = -1;
+  private int hoursWeek = 0;
+  private int hoursDay = 0;
+  private int timeAtStation = 0;
+
 
   /* Reference by driver id */
   public Driver(int id) {
@@ -30,6 +34,13 @@ class Driver {
   }
 
   /**
+   * Set how many hours they have worked "today"
+   */
+  public int getHoursThisWeek() {
+    return hoursWeek;
+  }
+
+  /**
    * Set how many hours they have worked
    */
   public void setHoursThisWeek(int hours) {
@@ -40,11 +51,47 @@ class Driver {
   /**
    * Set how many hours they have worked "today"
    */
+  public int getHoursThisDay() {
+    return hoursDay;
+  }
+
+  /**
+   * Set how many hours they have worked "today"
+   */
   public void setHoursThisDay(int hours) {
     hoursDay = hours;
   }
+
+  /**
+   * Set how many hours they have worked "today"
+   */
+  public void addHoursThisDay(int hours) {
+    hoursWeek += hours;
+    hoursDay += hours;
+  }
+
+
+  /**
+   * Set how many hours they have worked "today"
+   */
+  public boolean checkAddHours(int hours) {
+    hoursWeek += hours;
+    hoursDay += hours;
+    return hoursDay+hours<=MAX_DAY_HOURS&&hoursWeek+hours<=MAX_WEEK_HOURS;
+  }
+
+  /**
+   * Get hours at station
+   */
+  public int getTimeAtStation() {
+    return timeAtStation;
+  }
+
+  /**
+   * Get time back at station (when free again)
+   */
+  public int setTimeAtStation(int time) {
+    timeAtStation = time;
+  }
+
 }
-
-
-
-          boolean validId = false;
