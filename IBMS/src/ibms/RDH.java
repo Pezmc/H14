@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author cuckowp0
  */
 
@@ -156,8 +155,13 @@ public class RDH {
     //They are allowed to take the holiday
     compare = (Date) start.clone(); //make sure it's not a pointer
     while(compare.compareTo(end)<=0) {
-      println("\nBooked date "+compare);
-      DriverInfo.setAvailable(currentUserId, compare, false); //mark busy
+      //Currently no holiday booked
+      if(DriverInfo.isAvailable(currentUserId, compare)) {
+        println("\nBooked date "+compare);
+        DriverInfo.setAvailable(currentUserId, compare, false); //mark busy
+      } else {
+        holidayLength -= 1;
+      }
       compare.setDate(compare.getDate()+1);
     }
     

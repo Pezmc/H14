@@ -23,7 +23,7 @@ is divided into following sections:
     <fail message="Please build using Ant 1.8.0 or higher.">
         <condition>
             <not>
-                <antversion atleast="1.8.0"/>
+                <antversion atleast="1.7.1"/>
             </not>
         </condition>
     </fail>

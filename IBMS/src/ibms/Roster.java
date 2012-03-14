@@ -38,12 +38,20 @@ public class Roster
   //generate roster
   public static String generateRoster() {
     //opendb
+    database.openBusDatabase();
+
     //lists of drivers and busses
+    int[] busIds = BusInfo.getBuses();
+    int[] driverIds = DriverInfo.getDrivers();
 
     //for every driver
+    int i;
+    for(i = 0; i < driverIds.length; i++) {
        //reset driver hours to zero
-
+       DriverInfo.setHoursThisWeek(driverIds[i], 0);
+       
        //store duration of routes
+    }
 
     //for every day 0-7
         //set the times to zero for each day

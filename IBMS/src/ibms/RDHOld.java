@@ -1,5 +1,3 @@
-package ibms;
-
 import ibms.DriverInfo;
 import ibms.database;
 import java.io.*;
