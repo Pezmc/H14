@@ -152,7 +152,190 @@ public class RDHOld
         {
           case 1:
           {
-            
+            boolean rdhDone = false;
+            do
+            {
+              System.out.println("Choose the desired action from the list by giving its number");
+              if(startDate == null)
+                System.out.println("1) Give desired start date - Currently: -" );
+              else
+                System.out.println("1) Give desired start date - Currently: "
+                                    + dateFormat.format(startDate) );
+              if(endDate == null)
+                System.out.println("2) Give desired end date - Currently: -");
+              else
+                System.out.println("2) Give desired end date - Currently: "
+                                    + dateFormat.format(endDate));
+              if(startDate!= null && endDate != null)
+                System.out.println("3) Set holidays from "
+                                     + dateFormat.format(startDate)
+                                     + " to " + dateFormat.format(endDate));
+              System.out.println("0) Back to Main Menu");
+
+              //rdhDone =true;
+              
+
+              int rdhSelection = Integer.parseInt(input());
+              switch (rdhSelection)
+              {
+                case 1:
+                {
+                  // give the start date, sets the start date variable
+                  
+                  System.out.println("Enter start date (YYYY-MM-DD) :");
+                  String dateString = input();
+                  if(!(DateValidate.isValidDate(dateString)))
+                    System.out.println("Invalid date entered.");
+                  else
+                  { 
+                    try
+                    {
+                      startDate = (Date)dateFormat.parse(dateString);
+                    } // try
+                    catch (ParseException pe)
+                    {
+                        System.out.println("Invalid date");
+                    } // catch
+                    if(endDate != null)
+                    {
+                      if(!(startDate.before(endDate)))
+                      {
+                        System.out.println("The start date should be before "
+                                            + "the end date");
+                        System.out.println("Start date resetted.");
+                        startDate = null;
+                      }
+                    } // if
+                    //System.out.println(DriverInfo.isAvailable(driversID, startDate));
+                    //DriverInfo.setAvailable(driversID, startDate, false);
+                  } // else
+                  break;
+                } // case 1
+                  
+                case 2:
+                {
+                  
+                  // give the end date, sets the end date variable
+                  System.out.println("Enter end date (YYYY-MM-DD) :");
+                  String dateString = input();
+                  if(!(DateValidate.isValidDate(dateString)))
+                      System.out.println("Invalid date entered");
+                  else
+                  {
+                    try
+                    {
+                      endDate = dateFormat.parse(dateString);
+                    } // try
+                    catch (ParseException pe)
+                    {
+                        System.out.println("Invalid date");
+                    } // catch
+                    //System.out.println(endDate);
+                    if(startDate != null)
+                    {
+                      if((endDate.before(startDate)))
+                      {
+                        System.out.println("The end date should be after "
+                                            + "the start date");
+                        endDate = null;
+                      }
+                    } // if
+                  } // else
+                  break;
+                } // case 2
+
+                case 3:
+                {
+                  if (startDate == null || endDate == null)
+                  {
+                    System.out.println("Invalid option.");
+                    break;
+                  }
+                  if(totalHolidays  != DriverInfo.getHolidaysTaken(driversID))
+                  {
+                    if (endDate.getYear() == startDate.getYear())
+                    {
+                     if (endDate.getMonth()== startDate.getMonth())
+                      {
+                        if (endDate.getDate() == startDate.getDate())
+                           holidayDuration = 1;
+                        else
+                          holidayDuration = endDate.getDate() - startDate.getDate() +1;
+                      }
+                      else
+                      {
+                        
+                        holidayDuration = endDate.getDate() +
+                          (DateValidate.daysInMonth(startDate.getMonth()+1, startDate.getYear())
+                                            - startDate.getDate()) + 1;
+                      }
+                    }
+                    else
+                    {
+                      holidayDuration = endDate.getDate() +
+                        (DateValidate.daysInMonth(startDate.getMonth()+1, startDate.getYear())
+                                            - startDate.getDate()) + 1;
+                    }
+                    System.out.println("Total holidays to take:" +holidayDuration);
+
+                    if (holidayDuration + DriverInfo.getHolidaysTaken(driversID) > totalHolidays)
+                      System.out.println("You are exceeding the allowed 25 days of holidays per year.");
+                    else
+                    {
+                      Date j = (Date) startDate.clone();
+                      Date i = j;
+                      //System.out.println(startDate);
+
+                      boolean checkNext = true;
+                      while (i.compareTo(endDate)!=0 && checkNext)
+                      {
+                        int count = DriverInfo.getNoOfUnavailableDrivers(i);
+                        if (!(DriverInfo.getTotalDrivers() - count > 10))
+                          checkNext = false;
+                        i.setDate(i.getDate()+1);
+                      }
+                      //System.out.println(startDate);
+
+                      if (checkNext)
+                      {
+                        //System.out.println("There are available drivers.");
+                        Date k = startDate;
+                       // System.out.println(k);
+                       // System.out.println(startDate);
+                        //System.out.println(endDate);
+
+                        while (k.compareTo(endDate)<=0)
+                        {
+                          //System.out.println("storing" + k);
+                          DriverInfo.setAvailable(driversID, k  , false);
+                          k.setDate(k.getDate()+1);
+                        }
+                        // Updating the holidays taken
+                        DriverInfo.setHolidaysTaken(driversID,
+                                DriverInfo.getHolidaysTaken(driversID)+holidayDuration);
+                        System.out.println("Holidays approved!");
+                        rdhDone = true;
+                      }
+                      else
+                        System.out.println("There arent enough drivers available at"
+                                           + " certain dates that you have chosen.");
+
+                    }
+                  }
+                  else
+                    System.out.println("You dont have enough holidays left");
+                  break;
+                }
+                case 0:
+                {
+                  // Goes back to main menu
+                  rdhDone = true;
+                  break;
+                }
+                default:
+                  System.out.println("Invalid option.");
+              }
+            } while (!rdhDone);
             break;
           }
         
