@@ -85,31 +85,11 @@ public class Roster
     int dayOfWeek = 0;
     for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
       System.out.print("========================");
-      switch(dayOfWeek) {
-        case 0: System.out.print("Monday"); break;
-        case 1: System.out.print("Tuesday"); break;
-        case 2: System.out.print("Wednesday"); break;
-        case 3: System.out.print("Thrsday"); break;
-        case 4: System.out.print("Friday"); break;
-        case 5: System.out.print("Saturday"); break;
-        case 6: System.out.print("Sunday"); break;
-        default:
-          throw new IllegalArgumentException("The day of the week "
-                                             + dayOfWeek + " doesn't exist!");
-      }
+      System.out.print(Util.dowToString(dayOfWeek));
       System.out.println("========================");
 
       //switch on day to get kind (week/sat/sun)
-      TimetableInfo.timetableKind dayType;
-      if(dayOfWeek<=4) //week day
-          dayType = TimetableInfo.timetableKind.weekday;
-      else if(dayOfWeek==5) //sat
-          dayType = TimetableInfo.timetableKind.saturday;
-      else if(dayOfWeek==6) //sun
-          dayType = TimetableInfo.timetableKind.sunday;
-      else
-          throw new IllegalArgumentException("The day of the week "
-                                             + dayOfWeek + " doesn't exist!");
+      TimetableInfo.timetableKind dayType = Util.dowToKind(dayOfWeek);
 
       //create array lists that are empty
       int[] routeList = BusStopInfo.getRoutes();
@@ -175,6 +155,7 @@ public class Roster
       debug("================================================================");
       
       driverTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Driver>>());
+      ArrayList<Driver> todaysDrivers = new ArrayList<Driver>();
 
       //set the times to zero for each day
       for (Driver driver : drivers) {
@@ -185,16 +166,7 @@ public class Roster
       //reset busses
 
       //switch on day to get kind (week/sat/sun)
-      TimetableInfo.timetableKind dayType;
-      if(dayOfWeek<=4) //week day
-          dayType = TimetableInfo.timetableKind.weekday;
-      else if(dayOfWeek==5) //sat
-          dayType = TimetableInfo.timetableKind.saturday;
-      else if(dayOfWeek==6) //sun
-          dayType = TimetableInfo.timetableKind.sunday;
-      else
-          throw new IllegalArgumentException("The day of the week "
-                                             + dayOfWeek + " doesn't exist!");
+      TimetableInfo.timetableKind dayType = Util.dowToKind(dayOfWeek);
 
       //create array lists that are empty
       int[] routeList = BusStopInfo.getRoutes();
@@ -258,24 +230,37 @@ public class Roster
            //Reverse so most hours are at the top
            Collections.reverse(drivers);
 
-           int driverId = 0;
            //find a driver that we are allowed to choose
-           do {
+           int driverId = 0; //look at todays drivers...
+           while(chosenDriver==null&&driverId<todaysDrivers.size()) {
+             //Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
+             Driver currentDriver = todaysDrivers.get(driverId);
+
+             //if the drivers hours don't exceed the max
+                //and he is back and he is available
+             if(currentDriver.checkAddMinutes(serviceLength)
+                     &&currentDriver.checkShift(start, end))
+               chosenDriver = currentDriver;
+
+             driverId++;
+           }
+
+           //look at other drivers
+           driverId = 0;
+           while(chosenDriver==null&&driverId<drivers.size()) {
              //Driver randomDriver = drivers.get(rand.nextInt(drivers.size()));
              Driver randomDriver = drivers.get(driverId);
-
-             //debug("Looking at driver "+randomDriver);
 
              //if the drivers hours don't exceed the max
                 //and he is back and he is available
              if(randomDriver.checkAddMinutes(serviceLength)
-                     &&randomDriver.checkShift(start, end))
+                     &&randomDriver.checkShift(start, end)) {
                chosenDriver = randomDriver;
+               todaysDrivers.add(chosenDriver);
+             }
 
              driverId++;
-             //Thread.sleep(10);
            }
-           while(chosenDriver==null&&driverId<drivers.size());
 
            if(chosenDriver==null) {
              throw new Exception("I couldn't find a driver for service "
