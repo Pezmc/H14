@@ -48,7 +48,7 @@ public class Shifts {
   public void clearShifts() {
     hours = new ArrayList<int[]>();
   }
-  
+   
   /**
    * Move all the shifts forwards a day (mostly delete them)
    */

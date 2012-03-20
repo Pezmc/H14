@@ -155,7 +155,7 @@ class Driver extends Shifts implements Comparable {
   public void save() {
     DriverInfo.setHoursThisWeek(driverId, minutesWeek);
   }
-  
+   
   /**
    * Load information from database rather then using 0
    */

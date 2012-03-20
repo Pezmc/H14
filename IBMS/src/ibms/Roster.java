@@ -127,7 +127,7 @@ public class Roster
 
   //generate roster
   public static String generateRoster() throws InterruptedException, Exception {
-    //opendb
+    //opendb 
     database.openBusDatabase();
 
     //lists of drivers and busses

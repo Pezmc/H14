@@ -13,6 +13,10 @@ import java.util.ArrayList;
  */
 public class database
 {
+  
+  public static boolean getFalse() {
+    return false;
+  }
     
     public static database busDatabase = null;
     

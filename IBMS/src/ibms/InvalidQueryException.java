@@ -12,7 +12,7 @@ package ibms;
 
 public class InvalidQueryException extends RuntimeException
 {
-
+ 
   /**
    * Create an InvalidQueryException
    * @param problem A string which tries to explain the problem which can

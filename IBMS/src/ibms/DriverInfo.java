@@ -110,7 +110,7 @@ public class DriverInfo
     if (driver == 0) throw new InvalidQueryException("Nonexistent driver");
     database.busDatabase.set_value("driver", driver, "hours_this_year", value);
   }
-
+ 
   /**
    * Get the number of hours worked by a driver during the period of a
    * weekly roster
