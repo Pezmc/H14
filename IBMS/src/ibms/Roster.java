@@ -168,6 +168,7 @@ public class Roster
       
       driverTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Driver>>());
       busTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
+      
       ArrayList<Driver> todaysDrivers = new ArrayList<Driver>();
 
       //set the times to zero for each day
@@ -193,7 +194,8 @@ public class Roster
         debug("========================================================");
         
         driverTimes.get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Driver>());
-        busTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
+        busTimes.get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Bus>());
+        //busTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
         
         //65, 66, 67, 68
         //if(routeList[routeNo]>66) continue; ////////////////////ONLY DO 66 ATM
@@ -294,6 +296,11 @@ public class Roster
              }
 
              busId++;
+           }
+           
+           if(chosenBus==null) {
+             throw new Exception("I couldn't find a bus for service "
+                     +serviceNo+" "+services[serviceNo]+" :-(");
            }
 
            //Add the hours to the driver
