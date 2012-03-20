@@ -7,7 +7,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author cuckowp0
  */
 
@@ -39,23 +38,32 @@ public class Roster
   //Three dimensional array on DOW, ROUTE, SERVICE
   private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
   private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>>();
-  //public static ArrayList<ArrayList<ArrayList<Bus>>> busTimes = new ArrayList<ArrayList<ArrayList<Bus>>>();  
   
-  public static void main(String[] args) throws Exception {
-    try {
-      generateRoster();
-      printRoster();
-      printDriverHours();
-    } catch (InterruptedException ex) {
-      Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
-    } /*catch (Exception ex) {
-      System.out.println("Something went wrong: "+ex.getMessage());
-      System.out.println(ex);
-    }*/
+  /**
+   * Get the hashmap of driver times, you must have generated it
+   * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
+   */
+  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> getDriverTimes() {
+    if(driverTimes.size()==0)
+      throw new IllegalStateException("You haven't generated the roster yet?!?");
+    
+    return driverTimes;
   }
-  //read input
+  
+  /**
+   * Get the hashmap of driver times, you must have generated it
+   * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
+   */
+  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> getBusTimes() {
+    if(busTimes.size()==0)
+      throw new IllegalStateException("You haven't generated the roster yet?!?");
+    
+    return busTimes;
+  } 
 
-  //array lists to store info
+  /**
+   * Print out the driver hours at LOTS of text
+   */
   public static void printDriverHours() {
     int[] driverIds = DriverInfo.getDrivers();
     ArrayList<Driver> drivers = new ArrayList<Driver>();
@@ -81,6 +89,9 @@ public class Roster
     
   }
 
+  /**
+   * Print out the roster as lots of text
+   */
   public static void printRoster() {
     //for every day 0-6
     int dayOfWeek = 0;
@@ -125,7 +136,12 @@ public class Roster
     } //end for every day
   }
 
-  //generate roster
+  /**
+   * This generates the actual roster and saves it in this class 
+   * @return
+   * @throws InterruptedException
+   * @throws Exception 
+   */
   public static String generateRoster() throws InterruptedException, Exception {
     //opendb 
     database.openBusDatabase();
@@ -334,11 +350,27 @@ public class Roster
     return "";
   }
 
-  /*private static void writeLog()
-    FileWriter fs = new FileWriter("log");
-    BufferedWriter out = new BufferedWriter(fs);
-  );*/
-
+  /**
+   * Test method of the roster
+   */
+  public static void main(String[] args) throws Exception {
+    try {
+      generateRoster();
+      printRoster();
+      printDriverHours();
+    } catch (InterruptedException ex) {
+      Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
+    } /*catch (Exception ex) {
+      System.out.println("Something went wrong: "+ex.getMessage());
+      System.out.println(ex);
+    }*/
+  }
+  //read input  
+  
+  /**
+   * Use this to output info and (un)comment as required
+   * @param String message 
+   */
   private static void debug(String message) {
     //System.out.println(message);
   }
