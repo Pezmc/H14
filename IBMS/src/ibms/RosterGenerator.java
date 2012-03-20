@@ -33,116 +33,18 @@ import java.util.logging.Logger;
  * 5. The use of buses should be balanced to give each bus a roughly equal workload in any one roster.
  */
 
-public class Roster
+public class RosterGenerator
 {
-  //Three dimensional array on DOW, ROUTE, SERVICE
-  private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
-  private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>>();
-  
-  /**
-   * Get the hashmap of driver times, you must have generated it
-   * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
-   */
-  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> getDriverTimes() {
-    if(driverTimes.size()==0)
-      throw new IllegalStateException("You haven't generated the roster yet?!?");
-    
-    return driverTimes;
-  }
-  
-  /**
-   * Get the hashmap of driver times, you must have generated it
-   * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
-   */
-  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> getBusTimes() {
-    if(busTimes.size()==0)
-      throw new IllegalStateException("You haven't generated the roster yet?!?");
-    
-    return busTimes;
-  } 
-
-  /**
-   * Print out the driver hours at LOTS of text
-   */
-  public static void printDriverHours() {
-    int[] driverIds = DriverInfo.getDrivers();
-    ArrayList<Driver> drivers = new ArrayList<Driver>();
-
-    //for every driver
-    int i;
-    for(i = 0; i < driverIds.length; i++) {
-       //new driver
-       Driver driver = new Driver(driverIds[i]);
-
-       //Load driver infro from db
-       driver.load();
-       
-       //Add to our list
-       drivers.add(driver);
-       //store duration of routes
-    }
-
-    for(Driver driver : drivers) {
-      System.out.println(""+driver+" Total Week Hours: "+Util.minToTime(driver.getMinutesThisWeek()));
-      System.out.println();
-    }
-    
-  }
-
-  /**
-   * Print out the roster as lots of text
-   */
-  public static void printRoster() {
-    //for every day 0-6
-    int dayOfWeek = 0;
-    for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-      System.out.print("========================");
-      System.out.print(Util.dowToString(dayOfWeek));
-      System.out.println("========================");
-
-      //switch on day to get kind (week/sat/sun)
-      TimetableInfo.timetableKind dayType = Util.dowToKind(dayOfWeek);
-
-      //create array lists that are empty
-      int[] routeList = BusStopInfo.getRoutes();
-
-      //for every route
-      int routeNo;
-      for(routeNo = 0; routeNo < routeList.length; routeNo++) {
-        System.out.println("============Route "+routeList[routeNo]+"============");
-
-        //get a list of bus stops on this route
-        int[] busStops = BusStopInfo.getBusStops(routeList[routeNo]);
-
-        //get a list of services on this route
-        int[] services = TimetableInfo.getServices(routeList[routeNo],dayType);
-
-        //for every service
-        int serviceNo;
-        for(serviceNo = 0; serviceNo < services.length; serviceNo++) {
-          int[] serviceTimes = TimetableInfo.getServiceTimes(routeList[routeNo],dayType,serviceNo);
-          
-          System.out.println("Route/Service: "+routeList[routeNo]+"/"+services[serviceNo]);
-          System.out.println("Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
-          System.out.println("Bus: "+busTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
-          System.out.println("Start: "+Util.minToTime(serviceTimes[0])
-                              +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
-          System.out.println();
-           
-           //get the list of times
-           
-        } //end for every service
-      } //end for every route
-    } //end for every day
-  }
 
   /**
    * This generates the actual roster and saves it in this class 
-   * @return
+   * @return Roster the generated roster
    * @throws InterruptedException
    * @throws Exception 
    */
-  public static String generateRoster() throws InterruptedException, Exception {
+  public static Roster generateRoster() throws InterruptedException, Exception {
+    Roster currentRoster = new Roster();
+    
     //opendb 
     database.openBusDatabase();
 
@@ -182,8 +84,8 @@ public class Roster
       debug("===========Looking at new day "+dayOfWeek);
       debug("================================================================");
       
-      driverTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Driver>>());
-      busTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
+      currentRoster.getDriverTimes().put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Driver>>());
+      currentRoster.getBusTimes().put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
       
       ArrayList<Driver> todaysDrivers = new ArrayList<Driver>();
 
@@ -212,8 +114,8 @@ public class Roster
         debug("===========Looking at route "+routeNo+":"+routeList[routeNo]);
         debug("========================================================");
         
-        driverTimes.get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Driver>());
-        busTimes.get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Bus>());
+        currentRoster.getDriverTimes().get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Driver>());
+        currentRoster.getBusTimes().get(dayOfWeek).put(routeList[routeNo], new HashMap<Integer, Bus>());
         //busTimes.put(dayOfWeek, new HashMap<Integer, HashMap<Integer, Bus>>());
         
         //65, 66, 67, 68
@@ -332,10 +234,9 @@ public class Roster
            chosenBus.addShift(start, end);
 
            //Store this infomation
-           driverTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
-           busTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenBus);
-           
-       
+           currentRoster.getDriverTimes().get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
+           currentRoster.getBusTimes().get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenBus);
+          
            System.out.println("==Chose driver "+chosenDriver+ " for service "
                    + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
                    +Util.minToTime(end) + " with bus "+chosenBus);
@@ -347,7 +248,7 @@ public class Roster
     for(Driver driver : drivers)
       driver.save();
     
-    return "";
+    return currentRoster;
   }
 
   /**
@@ -355,11 +256,11 @@ public class Roster
    */
   public static void main(String[] args) throws Exception {
     try {
-      generateRoster();
-      printRoster();
-      printDriverHours();
+      Roster myRoster = generateRoster();
+      myRoster.print();
+      myRoster.printDriverHours();
     } catch (InterruptedException ex) {
-      Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(RosterGenerator.class.getName()).log(Level.SEVERE, null, ex);
     } /*catch (Exception ex) {
       System.out.println("Something went wrong: "+ex.getMessage());
       System.out.println(ex);
