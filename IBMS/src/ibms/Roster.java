@@ -29,7 +29,7 @@ import java.util.logging.Logger;
  * The properties of a good roster are:
  * 1. Rostering should maximise the amount of time a driver actually drives during a shift whilst not countering rules for breaks.
  * 2. The number of drivers used in a roster is minimised.
- * 3. The number of days worked per week per driver is minimised.
+ * 3. The number of days worked per week per driver is minimised. - 
  * 4. The allocation of hours in a week to drivers is fair.
  * 5. The use of buses should be balanced to give each bus a roughly equal workload in any one roster.
  */
@@ -37,8 +37,8 @@ import java.util.logging.Logger;
 public class Roster
 {
   //Three dimensional array on DOW, ROUTE, SERVICE
-  public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
-  public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>>();
+  private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
+  private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>>();
   //public static ArrayList<ArrayList<ArrayList<Bus>>> busTimes = new ArrayList<ArrayList<ArrayList<Bus>>>();  
   
   public static void main(String[] args) throws Exception {
@@ -113,6 +113,7 @@ public class Roster
           
           System.out.println("Route/Service: "+routeList[routeNo]+"/"+services[serviceNo]);
           System.out.println("Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
+          System.out.println("Bus: "+busTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
           System.out.println("Start: "+Util.minToTime(serviceTimes[0])
                               +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
           System.out.println();
@@ -133,6 +134,7 @@ public class Roster
     int[] busIds = BusInfo.getBuses();
     int[] driverIds = DriverInfo.getDrivers();
     ArrayList<Driver> drivers = new ArrayList<Driver>();
+    ArrayList<Bus> buses = new ArrayList<Bus>();
 
     //for every driver
     int i;
@@ -143,6 +145,15 @@ public class Roster
        //Add to our list
        drivers.add(driver);
        //store duration of routes
+    }
+    
+    //for every bus
+    for(i = 0; i < busIds.length; i++) {
+       //new driver
+       Bus bus = new Bus(busIds[i]);
+
+       //Add to our list
+       buses.add(bus);
     }
 
     //Random numbers
@@ -228,7 +239,8 @@ public class Roster
            //Sort all the drivers by hours this day
            Collections.sort(drivers);
            
-           //Reverse so most hours are at the top
+           //Reverse so most hours are at the top aka only choose new driver
+           //if we have too... this might not minimise days worked...
            Collections.reverse(drivers);
 
            //find a driver that we are allowed to choose
@@ -267,24 +279,38 @@ public class Roster
              throw new Exception("I couldn't find a driver for service "
                      +serviceNo+" "+services[serviceNo]+" :-(");
            }
+   
+           //look at busses
+           Bus chosenBus = null;
+           int busId = 0;
+           while(chosenBus==null&&busId<buses.size()) {
+             Bus possibleBus = buses.get(busId);
+
+             //if the bus is available
+             if(possibleBus.checkShift(start, end, 0)) {
+               chosenBus = possibleBus;
+             }
+
+             busId++;
+           }
 
            //Add the hours to the driver
            chosenDriver.addMinutesThisDay(serviceLength);
 
            //Update the drivers end time
            chosenDriver.addShift(start, end);
+           
+            //Update the busses end time
+           chosenBus.addShift(start, end);
 
            //Store this infomation
            driverTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
+           busTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenBus);
            
-           
+       
            System.out.println("==Chose driver "+chosenDriver+ " for service "
                    + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
-                   +Util.minToTime(end));
-
-              //while we haven't allocated a bus
-                //calculate bus back time
-                    //if the bus available mark it as used
+                   +Util.minToTime(end) + " with bus "+chosenBus);
         } //end for every service
       } //end for every route
     } //end for every day
