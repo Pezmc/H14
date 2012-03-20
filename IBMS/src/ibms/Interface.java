@@ -49,7 +49,7 @@ public class Interface extends javax.swing.JPanel {
 
         greeting.setText("Welcome!");
 
-        driverList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        driverList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Driver list" }));
         driverList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 driverListActionPerformed(evt);
@@ -110,6 +110,7 @@ public class Interface extends javax.swing.JPanel {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes;
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes;
     private static String[] driverNames = {""};
+    int selection = 0;
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         try {
@@ -131,7 +132,6 @@ public class Interface extends javax.swing.JPanel {
     private void driverListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverListActionPerformed
         // TODO add your handling code here:
         
-
 
 
     }//GEN-LAST:event_driverListActionPerformed
