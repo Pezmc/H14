@@ -33,7 +33,7 @@ import java.util.logging.Logger;
  * 5. The use of buses should be balanced to give each bus a roughly equal workload in any one roster.
  */
 
-public class Roster
+public class RosterGenerator
 {
   //Three dimensional array on DOW, ROUTE, SERVICE
   private static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes = new HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>>();
@@ -43,7 +43,7 @@ public class Roster
    * Get the hashmap of driver times, you must have generated it
    * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
    */
-  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> getDriverTimes() {
+  public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> getDriverTimes() {
     if(driverTimes.size()==0)
       throw new IllegalStateException("You haven't generated the roster yet?!?");
     
@@ -54,7 +54,7 @@ public class Roster
    * Get the hashmap of driver times, you must have generated it
    * @return The driver times as a hashmap on DOW, ROUTE, SERVICE
    */
-  public HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> getBusTimes() {
+  public static HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> getBusTimes() {
     if(busTimes.size()==0)
       throw new IllegalStateException("You haven't generated the roster yet?!?");
     
@@ -359,7 +359,7 @@ public class Roster
       printRoster();
       printDriverHours();
     } catch (InterruptedException ex) {
-      Logger.getLogger(Roster.class.getName()).log(Level.SEVERE, null, ex);
+      Logger.getLogger(RosterGenerator.class.getName()).log(Level.SEVERE, null, ex);
     } /*catch (Exception ex) {
       System.out.println("Something went wrong: "+ex.getMessage());
       System.out.println(ex);
