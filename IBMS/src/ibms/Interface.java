@@ -1,5 +1,7 @@
 package ibms;
 import java.awt.event.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -104,7 +106,16 @@ public class Interface extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            String roster = Roster.generateRoster();
+            
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_generateActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
