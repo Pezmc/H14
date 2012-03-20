@@ -138,6 +138,17 @@ class Driver extends Shifts implements Comparable {
     setTimeAtStation(time + BREAK_TIME_HOURS * 60);
   }*/
   
+  
+  /**
+   * Check whether is allowed to do another shift today
+   * @param start when the shift would start
+   * @param end when the shift would end
+   * @return boolean true/false whether driver can work
+   */
+  public boolean checkShift(int start, int end) {
+    return checkShift(start, end, BREAK_TIME_HOURS*60);
+  }
+  
   /**
    * Write any changes of the driver to the database
    */

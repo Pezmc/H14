@@ -113,6 +113,7 @@ public class Roster
           
           System.out.println("Route/Service: "+routeList[routeNo]+"/"+services[serviceNo]);
           System.out.println("Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
+          System.out.println("Bus: "+busTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]));
           System.out.println("Start: "+Util.minToTime(serviceTimes[0])
                               +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
           System.out.println();
@@ -278,24 +279,38 @@ public class Roster
              throw new Exception("I couldn't find a driver for service "
                      +serviceNo+" "+services[serviceNo]+" :-(");
            }
+   
+           //look at busses
+           Bus chosenBus = null;
+           int busId = 0;
+           while(chosenBus==null&&busId<buses.size()) {
+             Bus possibleBus = buses.get(busId);
+
+             //if the bus is available
+             if(possibleBus.checkShift(start, end, 0)) {
+               chosenBus = possibleBus;
+             }
+
+             busId++;
+           }
 
            //Add the hours to the driver
            chosenDriver.addMinutesThisDay(serviceLength);
 
            //Update the drivers end time
            chosenDriver.addShift(start, end);
+           
+            //Update the busses end time
+           chosenBus.addShift(start, end);
 
            //Store this infomation
            driverTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
+           busTimes.get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenBus);
            
-           
+       
            System.out.println("==Chose driver "+chosenDriver+ " for service "
                    + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
-                   +Util.minToTime(end));
-
-              //while we haven't allocated a bus
-                //calculate bus back time
-                    //if the bus available mark it as used
+                   +Util.minToTime(end) + " with bus "+chosenBus);
         } //end for every service
       } //end for every route
     } //end for every day

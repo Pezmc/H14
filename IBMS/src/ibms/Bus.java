@@ -36,4 +36,13 @@ class Bus extends Shifts {
     //Update id
     busNumber = BusInfo.busNumber(busId);
   }
+  
+  public String getBusNumber() {
+    return busNumber;
+  }
+  
+  @Override
+  public String toString() {
+    return getBusNumber();
+  }
 }

@@ -20,19 +20,9 @@ public class Shifts {
     time[1] = end;
     hours.add(time);
   }
-
-  /**
-   * Check whether is allowed to do another shift today
-   * @param start when the shift would start
-   * @param end when the shift would end
-   * @return boolean true/false whether driver can work
-   */
-  public boolean checkShift(int start, int end) {
-    return checkShift(start, end, BREAK_TIME_HOURS*60);
-  }
   
   /**
-   * Check whether the driver is allowed to do another shift today
+   * Check whether the object is allowed to do another shift today
    * @param start when the shift would start
    * @param end when the shift would end
    * @param margin required margin (mins)
@@ -59,7 +49,6 @@ public class Shifts {
     hours = new ArrayList<int[]>();
   }
   
-   
   /**
    * Move all the shifts forwards a day (mostly delete them)
    */
