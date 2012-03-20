@@ -1,5 +1,8 @@
 package ibms;
 import java.awt.event.*;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,8 +29,8 @@ public class Interface extends javax.swing.JPanel {
         view = new javax.swing.JButton();
         edit = new javax.swing.JButton();
         greeting = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        driverList = new javax.swing.JComboBox();
+        textArea1 = new java.awt.TextArea();
 
         setMinimumSize(new java.awt.Dimension(100, 200));
 
@@ -46,10 +49,10 @@ public class Interface extends javax.swing.JPanel {
 
         greeting.setText("Welcome!");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        driverList.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Driver list" }));
+        driverList.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                driverListActionPerformed(evt);
             }
         });
 
@@ -76,49 +79,98 @@ public class Interface extends javax.swing.JPanel {
                         .add(view, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
                     .add(layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(jComboBox1, 0, 161, Short.MAX_VALUE)))
-                .add(18, 18, 18)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 506, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(driverList, 0, 161, Short.MAX_VALUE)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(textArea1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 524, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(20, 20, 20)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
-                    .add(layout.createSequentialGroup()
-                        .add(greeting)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(generate)
-                        .add(14, 14, 14)
-                        .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(view)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                        .add(edit)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(requestholiday)))
+                .add(greeting)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(generate)
+                .add(14, 14, 14)
+                .add(driverList, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(view)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(edit)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(requestholiday)
+                .add(33, 33, 33))
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .add(textArea1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 222, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private HashMap<Integer, HashMap<Integer, HashMap<Integer, Driver>>> driverTimes;
+    private HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes;
+    private static String[] driverNames = {""};
+    int selection = 0;
+
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
-        // TODO add your handling code here:
+        try {
+            // TODO add your handling code here:
+            String roster = RosterGenerator.generateRoster();
+            textArea1.setText(roster);
+
+            driverTimes = RosterGenerator.getDriverTimes();
+            busTimes = RosterGenerator.getBusTimes();
+
+            driverList.setModel(new javax.swing.DefaultComboBoxModel(driverNames));
+            
+        }  catch (Exception ex) {
+            Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }//GEN-LAST:event_generateActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void driverListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverListActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        
 
+
+    }//GEN-LAST:event_driverListActionPerformed
+
+
+    public static void main(String args[]) {
+        int[] driverIds = DriverInfo.getDrivers();
+        ArrayList<Driver> drivers = new ArrayList<Driver>();
+
+        //for every driver
+        int i;
+
+        for(i = 0; i < driverIds.length; i++) {
+            //new driver
+            Driver driver = new Driver(driverIds[i]);
+
+            //Load driver infro from db
+            driver.load();
+
+            //Add to our list
+            drivers.add(driver);
+            //store duration of routes
+            driverNames[i] = driver.getName();
+        }
+
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Interface().setVisible(true);
+            }
+        });
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox driverList;
     private javax.swing.JButton edit;
     private javax.swing.JButton generate;
     private javax.swing.JLabel greeting;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton requestholiday;
+    private java.awt.TextArea textArea1;
     private javax.swing.JButton view;
     // End of variables declaration//GEN-END:variables
 
