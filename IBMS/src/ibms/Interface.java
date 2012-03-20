@@ -1,12 +1,5 @@
-/*
- * Interface.java
- *
- * Created on Mar 7, 2012, 11:06:04 AM
- */
-
 package ibms;
 import java.awt.event.*;
-
 
 /**
  *
@@ -33,6 +26,8 @@ public class Interface extends javax.swing.JPanel {
         view = new javax.swing.JButton();
         edit = new javax.swing.JButton();
         greeting = new javax.swing.JLabel();
+        jComboBox1 = new javax.swing.JComboBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
 
         setMinimumSize(new java.awt.Dimension(100, 200));
 
@@ -51,6 +46,13 @@ public class Interface extends javax.swing.JPanel {
 
         greeting.setText("Welcome!");
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -58,32 +60,46 @@ public class Interface extends javax.swing.JPanel {
             .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
                     .add(layout.createSequentialGroup()
-                        .add(60, 60, 60)
-                        .add(greeting)
-                        .add(0, 46, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .add(requestholiday, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(edit, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .add(62, 62, 62)
+                        .add(greeting))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(generate, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
                     .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                         .addContainerGap()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, requestholiday, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, edit, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                            .add(org.jdesktop.layout.GroupLayout.LEADING, view, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
-                            .add(generate, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))))
+                        .add(view, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
+                    .add(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jComboBox1, 0, 161, Short.MAX_VALUE)))
+                .add(18, 18, 18)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 506, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .addContainerGap()
-                .add(greeting)
-                .add(14, 14, 14)
-                .add(generate)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(view)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(edit)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(requestholiday)
-                .addContainerGap(45, Short.MAX_VALUE))
+                .add(20, 20, 20)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 205, Short.MAX_VALUE)
+                    .add(layout.createSequentialGroup()
+                        .add(greeting)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(generate)
+                        .add(14, 14, 14)
+                        .add(jComboBox1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(view)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                        .add(edit)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(requestholiday)))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -91,11 +107,17 @@ public class Interface extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_generateActionPerformed
 
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton edit;
     private javax.swing.JButton generate;
     private javax.swing.JLabel greeting;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton requestholiday;
     private javax.swing.JButton view;
     // End of variables declaration//GEN-END:variables
