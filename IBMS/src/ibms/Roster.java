@@ -177,7 +177,10 @@ public class Roster
         driver.nextDayShifts();
       }
       
-      //reset busses
+      //set the times to zero FUR DER BUSSES
+      for (Bus bus : buses) {
+        bus.nextDayShifts();
+      }
 
       //switch on day to get kind (week/sat/sun)
       TimetableInfo.timetableKind dayType = Util.dowToKind(dayOfWeek);
