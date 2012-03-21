@@ -128,16 +128,18 @@ public class Interface extends javax.swing.JFrame {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes;
     private static String[] driverNames = {""};
     int selection = 0;
+    Roster myRoster;
     String message = "";
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         try {
             // TODO add your handling code here:
-            Roster myRoster = new Roster();
+            myRoster = new Roster();
             textArea1.setText("Roster is currently being generated...");
 
             myRoster = RosterGenerator.generateRoster();
-            message = myRoster.print();
+            message = "" + myRoster;
+
             textArea1.setText("Roster has been generated...");
 
             driverTimes = myRoster.getDriverTimes();
