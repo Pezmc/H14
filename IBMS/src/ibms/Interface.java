@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  *
  * @author Ben
  */
-public class Interface extends javax.swing.JPanel {
+public class Interface extends javax.swing.JFrame {
 
     /** Creates new form Interface */
     public Interface() {
@@ -44,6 +44,11 @@ public class Interface extends javax.swing.JPanel {
         requestholiday.setLabel("Request Holiday");
 
         view.setLabel("View Roster");
+        view.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                viewActionPerformed(evt);
+            }
+        });
 
         edit.setLabel("Edit Roster");
 
@@ -111,15 +116,17 @@ public class Interface extends javax.swing.JPanel {
     private HashMap<Integer, HashMap<Integer, HashMap<Integer, Bus>>> busTimes;
     private static String[] driverNames = {""};
     int selection = 0;
+    String message = "";
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         try {
             // TODO add your handling code here:
-            Roster roster = new Roster();
-            textArea1.setText(roster);
+            Roster myRoster = new Roster();
+            myRoster = RosterGenerator.generateRoster();
+            message = myRoster.print();
 
-            driverTimes = roster.getDriverTimes();
-            busTimes = roster.getBusTimes();
+            driverTimes = myRoster.getDriverTimes();
+            busTimes = myRoster.getBusTimes();
 
         }  catch (Exception ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,16 +136,21 @@ public class Interface extends javax.swing.JPanel {
 
     private void driverListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_driverListActionPerformed
         // TODO add your handling code here:
-        
-
 
     }//GEN-LAST:event_driverListActionPerformed
+
+    private void viewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_viewActionPerformed
+        // TODO add your handling code here:
+        textArea1.setText(message);
+        textArea1.setCaretPosition(0);
+    }//GEN-LAST:event_viewActionPerformed
 
 
     public static void main(String args[]) {
         
 
         java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
             public void run() {
                 new Interface().setVisible(true);
             }
