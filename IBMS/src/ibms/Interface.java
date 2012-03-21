@@ -1,4 +1,5 @@
 package ibms;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -24,6 +25,7 @@ public class Interface extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFrame1 = new javax.swing.JFrame();
         generate = new javax.swing.JButton();
         requestholiday = new javax.swing.JButton();
         view = new javax.swing.JButton();
@@ -31,6 +33,17 @@ public class Interface extends javax.swing.JFrame {
         greeting = new javax.swing.JLabel();
         driverList = new javax.swing.JComboBox();
         textArea1 = new java.awt.TextArea();
+
+        org.jdesktop.layout.GroupLayout jFrame1Layout = new org.jdesktop.layout.GroupLayout(jFrame1.getContentPane());
+        jFrame1.getContentPane().setLayout(jFrame1Layout);
+        jFrame1Layout.setHorizontalGroup(
+            jFrame1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 400, Short.MAX_VALUE)
+        );
+        jFrame1Layout.setVerticalGroup(
+            jFrame1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(0, 300, Short.MAX_VALUE)
+        );
 
         setMinimumSize(new java.awt.Dimension(100, 200));
 
@@ -124,6 +137,7 @@ public class Interface extends javax.swing.JFrame {
             Roster myRoster = new Roster();
             myRoster = RosterGenerator.generateRoster();
             message = myRoster.print();
+            textArea1.setText("Roster has been generated..");
 
             driverTimes = myRoster.getDriverTimes();
             busTimes = myRoster.getBusTimes();
@@ -147,14 +161,9 @@ public class Interface extends javax.swing.JFrame {
 
 
     public static void main(String args[]) {
-        
 
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new Interface().setVisible(true);
-            }
-        });
+        new Interface().setVisible(true);
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -162,6 +171,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JButton edit;
     private javax.swing.JButton generate;
     private javax.swing.JLabel greeting;
+    private javax.swing.JFrame jFrame1;
     private javax.swing.JButton requestholiday;
     private java.awt.TextArea textArea1;
     private javax.swing.JButton view;

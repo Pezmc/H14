@@ -73,13 +73,17 @@ public class Roster {
  /**
    * Print out the roster as lots of text
    */
-  public void print() {
+  public String print() {
     //for every day 0-6
+      String message = "";
     int dayOfWeek = 0;
     for(dayOfWeek = 0; dayOfWeek < 7; dayOfWeek++) {
-      System.out.print("========================");
-      System.out.print(Util.dowToString(dayOfWeek));
-      System.out.println("========================");
+        message += "========================\n";
+        System.out.print("========================");
+        message += Util.dowToString(dayOfWeek);
+        System.out.print(Util.dowToString(dayOfWeek));
+        message += "\n========================\n";
+        System.out.println("========================");
 
       //switch on day to get kind (week/sat/sun)
       TimetableInfo.timetableKind dayType = Util.dowToKind(dayOfWeek);
@@ -90,6 +94,7 @@ public class Roster {
       //for every route
       int routeNo;
       for(routeNo = 0; routeNo < routeList.length; routeNo++) {
+          message += "============Route "+routeList[routeNo]+"============\n";
         System.out.println("============Route "+routeList[routeNo]+"============");
 
         //get a list of bus stops on this route
@@ -109,12 +114,22 @@ public class Roster {
           System.out.println("Start: "+Util.minToTime(serviceTimes[0])
                               +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]));
           System.out.println();
+
+
+          message += "Route/Service: "+routeList[routeNo]+"/"+services[serviceNo]+"\n";
+          message += "Driver: "+driverTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]) + "\n";
+          message += "Bus: "+busTimes.get(dayOfWeek).get(routeList[routeNo]).get(services[serviceNo]) + "\n";
+          message += "Start: "+Util.minToTime(serviceTimes[0])
+                              +"\tEnd: "+Util.minToTime(serviceTimes[serviceTimes.length-1]) + "\n";
+          message += "\n";
            
            //get the list of times
            
         } //end for every service
       } //end for every route
     } //end for every day
+
+    return message;
   }
   
   /**
