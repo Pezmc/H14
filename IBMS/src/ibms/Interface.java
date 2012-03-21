@@ -115,14 +115,12 @@ public class Interface extends javax.swing.JPanel {
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         try {
             // TODO add your handling code here:
-            String roster = RosterGenerator.generateRoster();
+            Roster roster = new Roster();
             textArea1.setText(roster);
 
-            driverTimes = RosterGenerator.getDriverTimes();
-            busTimes = RosterGenerator.getBusTimes();
+            driverTimes = roster.getDriverTimes();
+            busTimes = roster.getBusTimes();
 
-            driverList.setModel(new javax.swing.DefaultComboBoxModel(driverNames));
-            
         }  catch (Exception ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -138,24 +136,7 @@ public class Interface extends javax.swing.JPanel {
 
 
     public static void main(String args[]) {
-        int[] driverIds = DriverInfo.getDrivers();
-        ArrayList<Driver> drivers = new ArrayList<Driver>();
-
-        //for every driver
-        int i;
-
-        for(i = 0; i < driverIds.length; i++) {
-            //new driver
-            Driver driver = new Driver(driverIds[i]);
-
-            //Load driver infro from db
-            driver.load();
-
-            //Add to our list
-            drivers.add(driver);
-            //store duration of routes
-            driverNames[i] = driver.getName();
-        }
+        
 
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
