@@ -237,9 +237,9 @@ public class RosterGenerator
            currentRoster.getDriverTimes().get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenDriver);
            currentRoster.getBusTimes().get(dayOfWeek).get(routeList[routeNo]).put(services[serviceNo], chosenBus);
           
-           System.out.println("==Chose driver "+chosenDriver+ " for service "
-                   + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
-                   +Util.minToTime(end) + " with bus "+chosenBus);
+           //System.out.println("==Chose driver "+chosenDriver+ " for service "
+           //        + services[serviceNo]+" Time: "+Util.minToTime(start)+"->"
+           //        +Util.minToTime(end) + " with bus "+chosenBus);
         } //end for every service
       } //end for every route
     } //end for every day
