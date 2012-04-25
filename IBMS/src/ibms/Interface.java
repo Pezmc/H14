@@ -130,6 +130,7 @@ public class Interface extends javax.swing.JFrame {
     int selection = 0;
     Roster myRoster;
     String message = "";
+    
 
     private void generateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateActionPerformed
         try {
