@@ -15,7 +15,7 @@ public class JourneyPlanner {
     /**
      * @param args the command line arguments
      */
-    public static String printMsg="";
+    public static String outMessage="";
 
     public static ArrayList<Integer> sameRoutesInBusStop(int busStopNum) {
         int[] allRoutes = BusStopInfo.getRoutes(busStopNum);
@@ -65,18 +65,18 @@ public class JourneyPlanner {
 
         //Check that the stops are located in the relavent areas
         if(fromStopNum == 0) {
-            printMsg += "Bus stop '" + fromStop + "' is not located in the "
+            outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
         }
         if(toStopNum == 0) {
-            printMsg += "Bus stop '" + toStop + "' is not located in the "
+            outMessage += "Bus stop '" + toStop + "' is not located in the "
                    + toArea + " area.\n";
         }
 
         if((fromStopNum == 0) || toStopNum == 0) {
-            printMsg += "Select a bus stop which is located in the correct area\n";
+            outMessage += "Select a bus stop which is located in the correct area\n";
         } else if((fromArea.equals(toArea)) && (fromStop.equals(toStop))) {
-            printMsg += "The origin and destination information cannot be the same";
+            outMessage += "The origin and destination information cannot be the same";
         } else {
             //the information is legal
             ArrayList<Integer> fromList =  new ArrayList<Integer>();
@@ -142,21 +142,21 @@ public class JourneyPlanner {
                 }
             }
 
-            printMsg += "Origin: " + fromStop + ", " + fromArea + "\n";
-            printMsg += "Destination: " + toStop + ", " + toArea + "\n";
-            printMsg +="\n";
-            printMsg += "You can take the following routes: \n";
+            outMessage += "Origin: " + fromStop + ", " + fromArea + "\n";
+            outMessage += "Destination: " + toStop + ", " + toArea + "\n";
+            outMessage +="\n";
+            outMessage += "You can take the following routes: \n";
 
             for(int i = 0; i < possibleRoutes.size();i++) {
                 if((possibleRoutes.get(i) != -1) && (stops[i] != -1)) {
-                    printMsg += "Route: " + possibleRoutes.get(i) + ".\n";
-                    printMsg += "Number of stops between: " + stops[i] + "\n";
+                    outMessage += "Route: " + possibleRoutes.get(i) + ".\n";
+                    outMessage += "Number of stops between: " + stops[i] + "\n";
                 }
             }
         }
 
 
-        return printMsg;
+        return outMessage;
     }//getRoutes
     
 }
