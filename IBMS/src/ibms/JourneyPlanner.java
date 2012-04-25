@@ -5,6 +5,8 @@
 
 package ibms;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -158,5 +160,22 @@ public class JourneyPlanner {
 
         return outMessage;
     }//getRoutes
-    
+
+
+      /**
+   * Test method of the roster
+   */
+  public static void main(String[] args) throws Exception {
+    try {
+      Roster myRoster = RosterGenerator.generateRoster();
+      myRoster.print();
+      myRoster.printDriverHours();
+    } catch (InterruptedException ex) {
+      Logger.getLogger(RosterGenerator.class.getName()).log(Level.SEVERE, null, ex);
+    } /*catch (Exception ex) {
+      System.out.println("Something went wrong: "+ex.getMessage());
+      System.out.println(ex);
+    }*/
+  }
+  //read input  
 }

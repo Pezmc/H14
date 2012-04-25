@@ -165,6 +165,26 @@ public class BusStopInfo
   }
 
   /**
+   * Get the names of all the area codes
+   */
+  public static String[] areaNamesCache = new String[] { "-" };
+  public static String[] getAreaNames()
+  {
+    if(BusStopInfo.areaNamesCache[0]== "-") {
+      int[] areaIDs = BusStopInfo.getAreas();
+      String[] areaNames = new String[areaIDs.length+1];
+      int position = 0;
+      for(int id : areaIDs) {
+        areaNames[position] = getAreaName(id);
+        position++;
+      }
+      BusStopInfo.areaNamesCache = areaNames;
+    }
+
+    return BusStopInfo.areaNamesCache;
+  }
+
+  /**
    * Get the code for a given area, e.g. "MAR"
    */
   public static String getAreaCode(int area)
