@@ -43,12 +43,12 @@ public class JourneyPlanner {
         database.openBusDatabase();
 
         //Get the area number from bus stop info
-        int fromAreaInt = BusStopInfo.findAreaByName(fromArea);
-        int toAreaInt = BusStopInfo.findAreaByName(toArea);
+        int fromAreaId = BusStopInfo.findAreaByName(fromArea);
+        int toAreaId = BusStopInfo.findAreaByName(toArea);
 
         //Get the area code in the form ROM = Romiley'
-        String fromAreaCode = BusStopInfo.getAreaCode(fromAreaInt);
-        String toAreaCode = BusStopInfo.getAreaCode(toAreaInt);
+        String fromAreaCode = BusStopInfo.getAreaCode(fromAreaId);
+        String toAreaCode = BusStopInfo.getAreaCode(toAreaId);
 
         //Check that we are passing the correct arguments through
         System.out.println("From Area: " + fromArea + ", From bus stop: "
@@ -56,26 +56,32 @@ public class JourneyPlanner {
                         + "to bus stop," + toStop);
 
         //Check that we are getting the correct area codes
-        System.out.println("\nFrom Area: " + fromAreaCode + ", From bus stop: "
-                        +  fromStop + ", To area: "  +  toAreaCode
-                        + "to bus stop," + toStop);
+        System.out.println("\nFrom Area: " + fromAreaCode + ", Id: "
+                        + fromAreaId + ", From bus stop: "
+                        + fromStop + ", To area: "  +  toAreaCode
+                        + " Id: " + toAreaId
+                        + " to bus stop," + toStop);
 
 
         // Get the bus stop number for the 'from' and 'to' bus stop
-        int fromStopNum = BusStopInfo.findBusStop(fromAreaCode, fromStop);
-        int toStopNum = BusStopInfo.findBusStop(toAreaCode, toStop);
+        int fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
+        int toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
+        
+        //Output the bus stop codes
+        System.out.println("From bus stop id " + fromBusStopId);
+        System.out.println("To bus stop id " + toBusStopId);
 
         //Check that the stops are located in the relavent areas
-        if(fromStopNum == 0) {
+        if(fromAreaId == 0) {
             outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
         }
-        if(toStopNum == 0) {
+        if(toAreaId == 0) {
             outMessage += "Bus stop '" + toStop + "' is not located in the "
                    + toArea + " area.\n";
         }
 
-        if((fromStopNum == 0) || toStopNum == 0) {
+        if((fromBusStopId == 0) || toBusStopId == 0) {
             outMessage += "Select a bus stop which is located in the correct area\n";
         } else if((fromArea.equals(toArea)) && (fromStop.equals(toStop))) {
             outMessage += "The origin and destination information cannot be the same";
@@ -84,8 +90,8 @@ public class JourneyPlanner {
             ArrayList<Integer> fromList =  new ArrayList<Integer>();
             ArrayList<Integer> toList =  new ArrayList<Integer>();
 
-            fromList = sameRoutesInBusStop(fromStopNum);
-            toList = sameRoutesInBusStop(toStopNum);
+            fromList = sameRoutesInBusStop(fromAreaId);
+            toList = sameRoutesInBusStop(toBusStopId);
 
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
 
@@ -113,18 +119,18 @@ public class JourneyPlanner {
                 int routeIndex = 0;
 
                 while (routeIndex < noOfStops) {
-                    currentStopNum = fromStopNum;
+                    currentStopNum = fromAreaId;
                     stops[routeIndex] = 0;
 
                     //While destination has not been reached
-                    while (currentStopNum != toStopNum) {
+                    while (currentStopNum != toBusStopId) {
                         currentStopNum = BusStopInfo.getNextStop(currentStopNum, possibleRoutes.get(routeIndex));
                         stops[routeIndex] ++;
 
                         if (currentStopNum == 0) {
                             possibleRoutes.set(routeIndex, -1);
                             stops[routeIndex] = -1;
-                            currentStopNum = fromStopNum;
+                            currentStopNum = fromAreaId;
                             break;
                         }
                     }
@@ -133,10 +139,10 @@ public class JourneyPlanner {
                 }
             } else {
                 ArrayList<Integer> currentBusStopRoutes = new ArrayList<Integer>();
-                currentStopNum = fromStopNum;
+                currentStopNum = fromAreaId;
                 int routeIndex = 0;
                 while(routeIndex < fromList.size()) {
-                    while(currentStopNum != toStopNum) {
+                    while(currentStopNum != toBusStopId) {
                         currentStopNum = BusStopInfo.getNextStop(currentStopNum, possibleRoutes.get(routeIndex));
                         currentBusStopRoutes = sameRoutesInBusStop(currentStopNum);
 
@@ -167,11 +173,9 @@ public class JourneyPlanner {
    */
   public static void main(String[] args) throws Exception {
     try {
-      Roster myRoster = RosterGenerator.generateRoster();
-      myRoster.print();
-      myRoster.printDriverHours();
-    } catch (InterruptedException ex) {
-      Logger.getLogger(RosterGenerator.class.getName()).log(Level.SEVERE, null, ex);
+      
+    } catch (Exception ex) {
+      Logger.getLogger(JourneyPlanner.class.getName()).log(Level.SEVERE, null, ex);
     } /*catch (Exception ex) {
       System.out.println("Something went wrong: "+ex.getMessage());
       System.out.println(ex);

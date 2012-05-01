@@ -79,7 +79,8 @@ public class BusStopInfo
    */
   public static int findBusStop(String areaCode, String name)
   {
-    String source = database.join("bus_stop", "area", "area");
+    //WAS THIS A BUG?
+    String source = database.busDatabase.join("bus_stop", "area", "area");
     return database.busDatabase.find_id("bus_stop_id", source, "area.code", areaCode, "bus_stop.name", name);
   }
 
