@@ -170,9 +170,9 @@ public class BusStopInfo
   public static String[] areaNamesCache = new String[] { "-" };
   public static String[] getAreaNames()
   {
-    if(BusStopInfo.areaNamesCache[0]== "-") {
+    if(BusStopInfo.areaNamesCache[0].equals("-")) {
       int[] areaIDs = BusStopInfo.getAreas();
-      String[] areaNames = new String[areaIDs.length+1];
+      String[] areaNames = new String[areaIDs.length];
       int position = 0;
       for(int id : areaIDs) {
         areaNames[position] = getAreaName(id);
