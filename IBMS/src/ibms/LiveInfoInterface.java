@@ -37,7 +37,7 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         routeDropDown = new javax.swing.JComboBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        outputArea = new javax.swing.JTextArea();
         jLabel4 = new javax.swing.JLabel();
         timeField = new javax.swing.JTextField();
         submitButton = new javax.swing.JButton();
@@ -62,9 +62,9 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
         routeDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        outputArea.setColumns(20);
+        outputArea.setRows(5);
+        jScrollPane1.setViewportView(outputArea);
 
         jLabel4.setText("Time (HHMM):");
 
@@ -169,6 +169,9 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         String time = timeField.getText();
 
         if (checkInt(time) && time.length() == 4) {
+            outputArea.setText("Given time for journey: " + time + "\n");
+            
+
 
         }
 
@@ -229,7 +232,7 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea outputArea;
     private javax.swing.JComboBox routeDropDown;
     private javax.swing.JButton submitButton;
     private javax.swing.JTextField timeField;
