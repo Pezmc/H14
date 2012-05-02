@@ -173,7 +173,11 @@ public class JourneyPlanner {
    */
   public static void main(String[] args) throws Exception {
     try {
-      
+      System.out.println("YAY");
+      database.openBusDatabase();
+      int number = BusStopInfo.findBusStop("SKP", "Bus Station");
+      System.out.println(number);
+ 
     } catch (Exception ex) {
       Logger.getLogger(JourneyPlanner.class.getName()).log(Level.SEVERE, null, ex);
     } /*catch (Exception ex) {

@@ -241,7 +241,7 @@ public class JourneyPlannerInterface extends javax.swing.JFrame {
 
         dropdown.removeAllItems();
         for(int busStopId : busStopsInArea) {
-            dropdown.addItem(BusStopInfo.getFullName(busStopId));
+            dropdown.addItem(BusStopInfo.getStopName(busStopId));
         }
 
     }

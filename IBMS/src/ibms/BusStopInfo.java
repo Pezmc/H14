@@ -97,6 +97,20 @@ public class BusStopInfo
     else
       return "";
   }
+  
+   /**
+   * Get the SENSIBLE NAME name of a bus stop
+   * "Marple,Navigation"
+   */
+  public static String getStopName(int busStop)
+  {
+    if (busStop == 0) throw new InvalidQueryException("Nonexistent bus stop");
+    database db = database.busDatabase;
+    if (db.select_record("name", database.join("bus_stop", "area", "area"), "bus_stop_id", busStop))
+      return (String)db.get_field("name");
+    else
+      return "";
+  }
 
   /**
    * Get al the bus stops in a given area
