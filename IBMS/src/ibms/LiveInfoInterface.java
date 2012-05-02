@@ -61,11 +61,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         jLabel3.setText("Select your route:");
 
         routeDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
-        routeDropDown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                routeDropDownActionPerformed(evt);
-            }
-        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -74,11 +69,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         jLabel4.setText("Time (HHMM):");
 
         timeField.setText("0000");
-        timeField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                timeFieldActionPerformed(evt);
-            }
-        });
 
         submitButton.setText("Submit");
         submitButton.addActionListener(new java.awt.event.ActionListener() {
@@ -157,10 +147,14 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void timeFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_timeFieldActionPerformed
-        // TODO add your handling code here:
-
-    }//GEN-LAST:event_timeFieldActionPerformed
+    private boolean checkInt (String check) {
+        try {
+            Integer.parseInt(check);
+            return true;
+        } catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
 
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
@@ -171,6 +165,13 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         //the route along which you are going to travel
         String route = (String) routeDropDown.getSelectedItem();
 
+        //the time set by the user
+        String time = timeField.getText();
+
+        if (checkInt(time) && time.length() == 4) {
+
+        }
+
         
 
     }//GEN-LAST:event_submitButtonActionPerformed
@@ -179,10 +180,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         // TODO add your handling code here:
         busStopUpdate((String) busStopDropDown.getSelectedItem(), routeDropDown);
     }//GEN-LAST:event_busStopDropDownActionPerformed
-
-    private void routeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_routeDropDownActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_routeDropDownActionPerformed
 
     private void areaDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaDropDownActionPerformed
         // TODO add your handling code here:
