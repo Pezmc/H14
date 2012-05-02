@@ -84,15 +84,12 @@ public class JourneyPlanner {
         if((fromBusStopId == 0) || toBusStopId == 0) {
             outMessage += "Select a bus stop which is located in the correct area\n";
         } else if((fromArea.equals(toArea)) && (fromStop.equals(toStop))) {
-            outMessage += "The origin and destination information cannot be the same";
+            outMessage += "The origin and destination information cannot be the same\n";
         } else {
             //the information is legal
-            ArrayList<Integer> fromList =  new ArrayList<Integer>();
-            ArrayList<Integer> toList =  new ArrayList<Integer>();
-
-            fromList = sameRoutesInBusStop(fromAreaId);
-            toList = sameRoutesInBusStop(toBusStopId);
-
+            ArrayList<Integer> fromList = sameRoutesInBusStop(fromAreaId);
+            ArrayList<Integer> toList = sameRoutesInBusStop(toBusStopId);
+            
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
 
             for(int i = 0 ; i < fromList.size(); i++) {
