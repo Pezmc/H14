@@ -142,7 +142,7 @@ public class database
         }
         catch (Exception ex)
         {
-            throw new InvalidQueryException("Database access failed");
+            throw new InvalidQueryException("Database access failed - Select");
         }
     }
     
@@ -246,7 +246,7 @@ public class database
         }
         catch (Exception ex)
         {
-            throw new InvalidQueryException("Database access failed");
+            throw new InvalidQueryException("Database access failed - Move");
         }
     }
     
@@ -258,7 +258,7 @@ public class database
         }
         catch (Exception ex)
         {
-            throw new InvalidQueryException("Database access failed");
+            throw new InvalidQueryException("Database access failed - Move next");
         }
     }
     
@@ -270,7 +270,7 @@ public class database
         }
         catch (Exception ex)
         {
-            throw new InvalidQueryException("Database access failed");
+            throw new InvalidQueryException("Database access failed - Get field");
         }
     }
     
