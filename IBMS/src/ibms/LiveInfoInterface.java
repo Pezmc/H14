@@ -156,26 +156,36 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         }
     }
 
+    String route = "";
+    String busStopSelection = "";
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         // TODO add your handling code here:
         
         //the bus stop we are going to use
-        String busStopSelection = (String) busStopDropDown.getSelectedItem();
+        busStopSelection = (String) busStopDropDown.getSelectedItem();
 
         //the route along which you are going to travel
-        String route = (String) routeDropDown.getSelectedItem();
+        route = (String) routeDropDown.getSelectedItem();
 
         //the time set by the user
         String time = timeField.getText();
+        int currentTime = Integer.parseInt(time);
+        double probabilityOfBreakdown = 0;
 
         if (checkInt(time) && time.length() == 4) {
             outputArea.setText("Given time for journey: " + time + "\n");
-            
 
+            if (currentTime >= 0000 && currentTime <= 2359) {
+                probabilityOfBreakdown = Math.random();
 
+                if (probabilityOfBreakdown > 0.5) {
+                    outputArea.append(cancellation(probabilityOfBreakdown, currentTime));
+                }
+            }
+
+        } else {
+                System.out.println("Invalid time, please type in a correct time");
         }
-
-        
 
     }//GEN-LAST:event_submitButtonActionPerformed
 
@@ -210,6 +220,51 @@ public class LiveInfoInterface extends javax.swing.JFrame {
             dropdown.addItem(BusStopInfo.getFullName(busStopId));
         }
 
+    }
+
+    private String cancellation(double probability, int time) {
+        String message = "";
+        double delayTime = 100 * Math.random();
+
+        //if there is no delay
+        if (probability <= 0.5) {
+            //give the next available bus from the timetable at the given bus stop
+
+        } else {
+            //there has been a delay
+            //pick a random statement to print out regarding a delay
+            double delayNum = Math.random() * 10;
+
+            System.out.println("Delay choice: " + delayNum);
+
+            if (delayNum < 1) {
+                message += "There has been an accident on route " + route + " ";
+                message += "at " + busStopSelection + ", ";
+                message += "which has lead to a delay of " + (int)delayTime + ".";
+            } else if (delayNum < 2 && delayNum > 1) {
+                
+            } else if (delayNum < 3 && delayNum > 2) {
+
+            } else if (delayNum < 4 && delayNum > 3) {
+
+            }else if (delayNum < 5 && delayNum > 4) {
+
+            }else if (delayNum < 6 && delayNum > 5) {
+
+            }else if (delayNum < 7 && delayNum > 6) {
+
+            }else if (delayNum < 8 && delayNum > 7) {
+
+            }else if (delayNum < 9 && delayNum > 8) {
+
+            }else if (delayNum < 10 && delayNum > 9) {
+
+            }
+
+
+        }
+
+        return message;
     }
 
     /**
