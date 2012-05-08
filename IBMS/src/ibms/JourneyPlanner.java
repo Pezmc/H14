@@ -22,6 +22,11 @@ public class JourneyPlanner {
     public static ArrayList<Integer> sameRoutesInBusStop(int busStopNum) {
         int[] allRoutes = BusStopInfo.getRoutes(busStopNum);
 
+        System.out.print("\nAll routes list routes: ");
+            for (int i = 0; i < allRoutes.length; i++) {
+                System.out.print(allRoutes[i] + " ");
+            }
+        
         int route = 65;
         ArrayList<Integer> routesAtStop =  new ArrayList<Integer>();
         while(route <= 68) {
@@ -92,6 +97,18 @@ public class JourneyPlanner {
             
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
 
+            //Check that the above code returns a list of routes possible
+            System.out.print("\nFrom list routes: ");
+            for (int i = 0; i < fromList.size(); i++) {
+                System.out.print(fromList.get(i) + " ");
+            }
+            
+            //Check that the above code returns a list of routes possible
+            System.out.print("\nTo list routes: ");
+            for (int i = 0; i < toList.size(); i++) {
+                System.out.print(toList.get(i) + " ");
+            }
+            
             for(int i = 0 ; i < fromList.size(); i++) {
                 for(int j = 0 ; j < toList.size(); j++) {
                     if(fromList.get(i) == toList.get(j)) {
@@ -102,7 +119,7 @@ public class JourneyPlanner {
             }
 
             //Check that the above code returns a list of routes possible
-            System.out.print("Possible routes: ");
+            System.out.print("\nPossible routes: ");
             for (int i = 0; i < possibleRoutes.size();i++) {
                 System.out.print(possibleRoutes.get(i) + " ");
             }
@@ -150,6 +167,12 @@ public class JourneyPlanner {
             outMessage += "Origin: " + fromStop + ", " + fromArea + "\n";
             outMessage += "Destination: " + toStop + ", " + toArea + "\n";
             outMessage +="\n";
+            
+            if(possibleRoutes.size()==0) {
+              outMessage += "There are no possible routes to take...\n";
+              return outMessage;
+            }
+            
             outMessage += "You can take the following routes: \n";
 
             for(int i = 0; i < possibleRoutes.size();i++) {
@@ -158,6 +181,8 @@ public class JourneyPlanner {
                     outMessage += "Number of stops between: " + stops[i] + "\n";
                 }
             }
+            
+            outMessage += "\nDone";
         }
 
 
