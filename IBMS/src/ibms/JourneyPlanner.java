@@ -47,6 +47,8 @@ public class JourneyPlanner {
 
         database.openBusDatabase();
 
+        /* IS THERE ANY WAY TO HAVE THE OUTPUT CLEARED BEFORE NEW CHOICES ARE SELECTED? */
+
         //Get the area number from bus stop info
         int fromAreaId = BusStopInfo.findAreaByName(fromArea);
         int toAreaId = BusStopInfo.findAreaByName(toArea);
@@ -83,7 +85,7 @@ public class JourneyPlanner {
         //Check that the stops are located in the relavent areas
 /********** FROM TESTS THE TWO BELOW IF STATEMENTS DONT WORK/RUN WHEN I INPUT
             AN INCORRECT STOP FOR AN AREA, I KNOW THE GUI DOESNT LET YOU
-            BUT STILL - caps lock to get ur attention not shoutin lol**************/
+            BUT STILL - caps lock to get ur attention lol**************/
         if(fromAreaId == 0) {
             outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
