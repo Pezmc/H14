@@ -50,6 +50,10 @@ public class JourneyPlanner {
         //Get the area number from bus stop info
         int fromAreaId = BusStopInfo.findAreaByName(fromArea);
         int toAreaId = BusStopInfo.findAreaByName(toArea);
+        
+        System.out.println(fromAreaId);
+        System.out.println(toAreaId);
+
 
         //Get the area code in the form ROM = Romiley'
         String fromAreaCode = BusStopInfo.getAreaCode(fromAreaId);
@@ -71,12 +75,15 @@ public class JourneyPlanner {
         // Get the bus stop number for the 'from' and 'to' bus stop
         int fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
         int toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
-        
+
         //Output the bus stop codes
         System.out.println("From bus stop id " + fromBusStopId);
         System.out.println("To bus stop id " + toBusStopId);
 
         //Check that the stops are located in the relavent areas
+/********** FROM TESTS THE TWO BELOW IF STATEMENTS DONT WORK/RUN WHEN I INPUT
+            AN INCORRECT STOP FOR AN AREA, I KNOW THE GUI DOESNT LET YOU
+            BUT STILL - caps lock to get ur attention not shoutin lol**************/
         if(fromAreaId == 0) {
             outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
@@ -168,7 +175,7 @@ public class JourneyPlanner {
             outMessage += "Destination: " + toStop + ", " + toArea + "\n";
             outMessage += "\n";
 
-            // POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN
+  /******* POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN *******/
             if(possibleRoutes.isEmpty()) {
               outMessage += "There are no possible routes to take...\n";
               return outMessage;
