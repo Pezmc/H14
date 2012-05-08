@@ -123,6 +123,25 @@ public class TimetableInfo
   {
     return getServiceTimes(route, new Date(), serviceNumber);
   }
+  
+  //added the getTimes below
+  public static int[] getTimes (int route, timetableKind kind, int serviceNumber) {
+    if (route == 0) throw new InvalidQueryException("Nonexistent route");
+    int[] service_ids = getServices(route, kind);
+    int   numberOfServices = service_ids.length;
+    if (serviceNumber < 0 || serviceNumber >=  numberOfServices) throw new InvalidQueryException("Invalid service number " + serviceNumber);
+    int service = service_ids[serviceNumber];
+    String source = database.join("timetable_line", "service", "service");
+    return database.busDatabase.select_ids("timetable_line_id", source, "service", serviceNumber, "time"); //changed this back
+  }
+
+  public static int[] getTimes(int route, Date date, int serviceNumber) {
+      return getTimes(route, timetableKind(date), serviceNumber);
+  }
+
+  public static int[] getTimes(int route, int serviceNumber) {
+      return getTimes(route, new Date(), serviceNumber);
+  }
 
   /**
    * Get the timetable kind for a day

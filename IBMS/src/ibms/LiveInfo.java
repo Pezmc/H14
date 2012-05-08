@@ -36,8 +36,8 @@ public class LiveInfo {
                 message += "There has been an accident on route " + route + " ";
                 message += "after \n" + busStopSelection + ". ";
             }else if (delayNum < 10 && delayNum > 9) {
-                message += "There has been an accident on route " + route + " ";
-                message += "after \n" + busStopSelection + ". ";
+                message += "The service has been cancelled due to a lack of drivers.";
+                message += "\nRoute " + route + " will not be in service today.";
             }
 
         return message;
@@ -47,14 +47,43 @@ public class LiveInfo {
         String message = "";
         double delay = 60 * Math.random();
 
+        int hour = (time[0]) *10 + (time[1]);
+        int mins = (time[2])*10 + (time[3]);
+
+        System.out.println("Time hours: " + hour);
+        System.out.println("Time mins: " + mins);
+
+        int actualTime = (hour*60) + mins;
+        System.out.println("Time actualTime: " + actualTime);
+
+        int newTime = actualTime + (int)delay;
+
+        hour = newTime / 60;
+        mins = newTime % 60;
+
         //there has been a delay
         //pick a random statement to print out regarding a delay
         double delayNum = Math.random() * 10;
+        String displayTime = "";
+
+        if (hour < 10 && mins < 10){
+            displayTime += " [0" + hour + ":0" + mins + "]";
+        }
+        else if (mins < 10) {
+            displayTime +=(" [" + hour + ":0" + mins + "]");
+        }
+        else if (hour < 10 && mins >= 10) {
+            displayTime +=(" [0" + hour + ":" + mins + "]");
+        }
+        else {
+            displayTime +=(" [" + hour + ":" + mins + "]");
+        }
+
 
         //update the string with the delay information
         message += "" + getDelay(delayNum, route, busStopSelection);
         message += "\nWhich has lead to a delay of " + (int)delay + " mins.";
-
+        message += "\nThe next available bus at - " + busStopSelection + " \nwill arrive at at: " + displayTime + ".";
         return message;
     }
 
@@ -63,38 +92,31 @@ public class LiveInfo {
         //get the timing points for the route selected
         String message = "";
         int noServices = TimetableInfo.getNumberOfServices(route);
-        System.out.println("Number of services: " + noServices);
+        int hour = (time[0]) *10 + (time[1]);
+        int mins = (time[2])*10 + (time[3]);
+
+        int actualTime = (hour*60) + mins;
+        //int nextTime = 0;
+        //int tempTime = 0;
+
+        /*System.out.println("Number of services: " + noServices);
         int [] services = TimetableInfo.getServices(route, TimetableInfo.timetableKind(database.today()));
         for (int i = 0; i < services.length; i ++) {
-            System.out.println("Service [" + services[i] + "]");
-        }
+            int timings[] = TimetableInfo.getTimes(route, i);
+            System.out.println("Timings: " + timings[i] + "\tActual time: " + actualTime);
 
-        String time_s = "" + time[0] + time[1] + time[2] + time[3];
-        int timeNum = Integer.parseInt(time_s);
-        int nextTime = 0;
-        int tempTime = 0;
-
-        for (int i = 0; i < services.length; i ++) {
-            int timings[] = TimetableInfo.getServiceTimes(route, services[i]);
             for (int j = 0; j < timings.length; j ++) {
-                if (timings[j] >= timeNum) {
-                    tempTime = timings[j];
-                    break;
+                
+                if (timings[j] >= actualTime) {
+                    nextTime = timings[j];
                 }
             }
-            if (tempTime < nextTime) {
-                nextTime = tempTime;
-            }
-        }
-
-        //the raw time is the time given turned into time that the database can handle
-        int rawTime = (time[0]*60*10) + (time[1]*60) + (time[2]*10 + time[3]);
-
-        //System.out.println("The raw time I have calculated is: " + rawTime);
-        
+        }   
+         *
+         */
 
         message += "There is no delay on route " + route + ".\n";
-        message += "The next available bus at " + busStopSelection + " \nwill arrive at at: " + nextTime + ".";
+        message += "The next available bus at - " + busStopSelection + " \nwill arrive at normal time.";
 
         return message;
     }
