@@ -8,15 +8,12 @@
  *
  * Created on May 1, 2012, 12:41:14 PM
  */
-
 package ibms;
-
 /**
  *
  * @author Ben
  */
 public class LiveInfoInterface extends javax.swing.JFrame {
-
     /** Creates new form LiveInfoInterface */
     public LiveInfoInterface() {
         initComponents();
@@ -159,8 +156,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     String route = "";
     String busStopSelection = "";
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        // TODO add your handling code here:
-        
         //the bus stop we are going to use
         busStopSelection = (String) busStopDropDown.getSelectedItem();
 
@@ -169,6 +164,7 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
         //the time set by the user
         String time = timeField.getText();
+        int [] times = new int [4];
         int currentTime = Integer.parseInt(time);
         double probabilityOfBreakdown = 0;
 
@@ -177,16 +173,18 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
             if (currentTime >= 0000 && currentTime <= 2359) {
                 probabilityOfBreakdown = Math.random();
+                times[0] = Integer.parseInt(Character.toString(time.charAt(0)));
+                times[1] = Integer.parseInt(Character.toString(time.charAt(1)));
+                times[2] = Integer.parseInt(Character.toString(time.charAt(2)));
+                times[3] = Integer.parseInt(Character.toString(time.charAt(3)));
 
                 if (probabilityOfBreakdown > 0.5) {
-                    outputArea.append(cancellation(probabilityOfBreakdown, currentTime));
+                    outputArea.append(cancellation(probabilityOfBreakdown, times));
                 }
             }
-
         } else {
                 System.out.println("Invalid time, please type in a correct time");
         }
-
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void busStopDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busStopDropDownActionPerformed
@@ -201,7 +199,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
 
     private void busStopUpdate(String busStop, javax.swing.JComboBox dropdown) {
-
         int [] routesAtBusStop = BusStopInfo.getRoutes();
 
         dropdown.removeAllItems();
@@ -211,7 +208,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     }
 
     private void areaUpdate(String area, javax.swing.JComboBox dropdown) {
-
         int areaNum = BusStopInfo.findAreaByName(area);
         int [] busStopsInArea = BusStopInfo.getBusStopsInArea(areaNum);
 
@@ -222,14 +218,43 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
     }
 
-    private String cancellation(double probability, int time) {
+    private String cancellation(double probability, int [] time) {
         String message = "";
-        double delayTime = 100 * Math.random();
+        double delay = 100 * Math.random();
+        String delayTimeMessage = "";
+        if (delay >= 60) {
+            delay = delay / 60;
+        }
+        delayTimeMessage += "which has lead to a delay of " + (int)delay + " mins.";
 
         //if there is no delay
         if (probability <= 0.5) {
-            //give the next available bus from the timetable at the given bus stop
+            //give the next available bus from the timetable at the bus stop
+            //as there has been no delay
 
+            //get the timing points for the route selected, then use these to 
+            //compare to the raw time
+            int routeInt = Integer.parseInt(route);
+            int [] timingPoints = TimetableInfo.getTimingPoints(routeInt);
+            int nextTime = 0;
+
+            //the raw time is the time given turned into time that the database can handle
+            int rawTime = (time[0]*60*10) + (time[1]*60) + (time[2]*10 + time[3]);
+
+            System.out.println("The raw time I have calculated is: " + rawTime);
+
+            //loop through the timing points, when we find one greater than the currentTime
+            //we inform the passenger of the next time that bus will be at the station in question
+            for (int i = 0; i < timingPoints.length; i ++) {
+                if (rawTime < timingPoints[i]) {
+                    nextTime = (timingPoints[i]/100)*60;
+                    break;
+                }
+            }
+
+
+            message += "There is no delay on route " + route + ".";
+            message += "The next available bus at " + busStopSelection + "is at " + nextTime + ".";
         } else {
             //there has been a delay
             //pick a random statement to print out regarding a delay
@@ -239,31 +264,44 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
             if (delayNum < 1) {
                 message += "There has been an accident on route " + route + " ";
-                message += "at " + busStopSelection + ", ";
-                message += "which has lead to a delay of " + (int)delayTime + ".";
+                message += "after " + busStopSelection + ", ";
+                message += delayTimeMessage;
             } else if (delayNum < 2 && delayNum > 1) {
-                
+                message += "There has been a crash involving a cyclist on the " + route + " route.";
+                message += delayTimeMessage;
             } else if (delayNum < 3 && delayNum > 2) {
-
+                message += "A plane has hit the bus! ";
+                message += delayTimeMessage;
             } else if (delayNum < 4 && delayNum > 3) {
+                message += "The bus that was supposed to be at this stop has broken down";
+                message += delayTimeMessage;
 
             }else if (delayNum < 5 && delayNum > 4) {
-
+                message += "A herd of cows has blocked the road!";
+                message += delayTimeMessage;
             }else if (delayNum < 6 && delayNum > 5) {
+                message += "The bus driver is running late!";
+                message += delayTimeMessage;
 
             }else if (delayNum < 7 && delayNum > 6) {
+                message += "A new bus is being driven to collect you as the old bus fell apart.";
+                message += delayTimeMessage;
 
             }else if (delayNum < 8 && delayNum > 7) {
+                message += "The bus that was supposed to be at this stop has broken down";
+                message += delayTimeMessage;
 
             }else if (delayNum < 9 && delayNum > 8) {
+                message += "There has been an accident on route " + route + " ";
+                message += "after " + busStopSelection + ", ";
+                message += delayTimeMessage;
 
             }else if (delayNum < 10 && delayNum > 9) {
-
+                message += "There has been an accident on route " + route + " ";
+                message += "after " + busStopSelection + ", ";
+                message += delayTimeMessage;
             }
-
-
         }
-
         return message;
     }
 
