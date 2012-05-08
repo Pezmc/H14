@@ -17,7 +17,7 @@ public class LiveInfo {
         String message = "";
         if (delayNum < 1) {
                 message += "There has been an accident on route " + route + " ";
-                message += "after " + busStopSelection + ", ";
+                message += "after " + busStopSelection + ".";
             } else if (delayNum < 2 && delayNum > 1) {
                 message += "There has been a crash involving a cyclist on the " + route + " route.";
             } else if (delayNum < 3 && delayNum > 2) {
