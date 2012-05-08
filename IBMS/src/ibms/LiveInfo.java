@@ -17,6 +17,7 @@ public class LiveInfo {
         if (delayNum < 1) {
                 message += "There has been an accident on route " + route + " ";
                 message += "after \n" + busStopSelection + ". ";
+
             } else if (delayNum < 2 && delayNum > 1) {
                 message += "There has been a crash involving a cyclist on the " + route + " \nroute.";
             } else if (delayNum < 3 && delayNum > 2) {

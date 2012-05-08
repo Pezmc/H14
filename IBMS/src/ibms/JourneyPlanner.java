@@ -22,6 +22,11 @@ public class JourneyPlanner {
     public static ArrayList<Integer> sameRoutesInBusStop(int busStopNum) {
         int[] allRoutes = BusStopInfo.getRoutes(busStopNum);
 
+        System.out.print("\nAll routes list routes: ");
+            for (int i = 0; i < allRoutes.length; i++) {
+                System.out.print(allRoutes[i] + " ");
+            }
+        
         int route = 65;
         ArrayList<Integer> routesAtStop =  new ArrayList<Integer>();
         while(route <= 68) {
@@ -37,14 +42,24 @@ public class JourneyPlanner {
         return routesAtStop;
     } // sameRoutesInBusStop
 
+    public static int fromAreaId;
+    public static int toAreaId;
+    public static int fromBusStopId;
+    public static int toBusStopId;
 
     public static String getRoutes(String fromArea, String fromStop,String toArea, String toStop) {
 
         database.openBusDatabase();
 
-        //Get the area number from bus stop info
-        int fromAreaId = BusStopInfo.findAreaByName(fromArea);
-        int toAreaId = BusStopInfo.findAreaByName(toArea);
+        /* IS THERE ANY WAY TO HAVE THE OUTPUT CLEARED BEFORE NEW CHOICES ARE SELECTED? */
+
+        //Get the area number from bus stop info, does this work for different Bus Stations?
+        fromAreaId = BusStopInfo.findAreaByName(fromArea);
+        toAreaId = BusStopInfo.findAreaByName(toArea);
+        
+        System.out.println(fromAreaId);
+        System.out.println(toAreaId);
+
 
         //Get the area code in the form ROM = Romiley'
         String fromAreaCode = BusStopInfo.getAreaCode(fromAreaId);
@@ -61,17 +76,18 @@ public class JourneyPlanner {
                         + fromStop + ", To area: "  +  toAreaCode
                         + " Id: " + toAreaId
                         + " to bus stop," + toStop);
-
-
         // Get the bus stop number for the 'from' and 'to' bus stop
-        int fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
-        int toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
-        
+        fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
+        toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
+
         //Output the bus stop codes
         System.out.println("From bus stop id " + fromBusStopId);
         System.out.println("To bus stop id " + toBusStopId);
 
         //Check that the stops are located in the relavent areas
+/********** FROM TESTS THE TWO BELOW IF STATEMENTS DONT WORK/RUN WHEN I INPUT
+            AN INCORRECT STOP FOR AN AREA, I KNOW THE GUI DOESNT LET YOU
+            BUT STILL - caps lock to get ur attention lol**************/
         if(fromAreaId == 0) {
             outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
@@ -84,17 +100,26 @@ public class JourneyPlanner {
         if((fromBusStopId == 0) || toBusStopId == 0) {
             outMessage += "Select a bus stop which is located in the correct area\n";
         } else if((fromArea.equals(toArea)) && (fromStop.equals(toStop))) {
-            outMessage += "The origin and destination information cannot be the same";
+            outMessage += "The origin and destination information cannot be the same\n";
         } else {
             //the information is legal
-            ArrayList<Integer> fromList =  new ArrayList<Integer>();
-            ArrayList<Integer> toList =  new ArrayList<Integer>();
-
-            fromList = sameRoutesInBusStop(fromAreaId);
-            toList = sameRoutesInBusStop(toBusStopId);
-
+            ArrayList<Integer> fromList = sameRoutesInBusStop(fromAreaId);
+            ArrayList<Integer> toList = sameRoutesInBusStop(toBusStopId);
+            
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
 
+            //Check that the above code returns a list of routes possible
+            System.out.print("\nFrom list routes: ");
+            for (int i = 0; i < fromList.size(); i++) {
+                System.out.print(fromList.get(i) + " ");
+            }
+            
+            //Check that the above code returns a list of routes possible
+            System.out.print("\nTo list routes: ");
+            for (int i = 0; i < toList.size(); i++) {
+                System.out.print(toList.get(i) + " ");
+            }
+            
             for(int i = 0 ; i < fromList.size(); i++) {
                 for(int j = 0 ; j < toList.size(); j++) {
                     if(fromList.get(i) == toList.get(j)) {
@@ -105,7 +130,7 @@ public class JourneyPlanner {
             }
 
             //Check that the above code returns a list of routes possible
-            System.out.print("Possible routes: ");
+            System.out.print("\nPossible routes: ");
             for (int i = 0; i < possibleRoutes.size();i++) {
                 System.out.print(possibleRoutes.get(i) + " ");
             }
@@ -152,7 +177,14 @@ public class JourneyPlanner {
 
             outMessage += "Origin: " + fromStop + ", " + fromArea + "\n";
             outMessage += "Destination: " + toStop + ", " + toArea + "\n";
-            outMessage +="\n";
+            outMessage += "\n";
+
+  /******* POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN *******/
+            if(possibleRoutes.isEmpty()) {
+              outMessage += "There are no possible routes to take...\n";
+              return outMessage;
+            }
+            
             outMessage += "You can take the following routes: \n";
 
             for(int i = 0; i < possibleRoutes.size();i++) {
@@ -161,6 +193,8 @@ public class JourneyPlanner {
                     outMessage += "Number of stops between: " + stops[i] + "\n";
                 }
             }
+            
+            outMessage += "\nDone";
         }
 
 
