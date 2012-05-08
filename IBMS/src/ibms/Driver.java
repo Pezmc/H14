@@ -24,7 +24,6 @@ class Driver extends Shifts implements Comparable {
   private ArrayList<int[]> hours = new ArrayList<int[]>();
   private String name = "";
 
-
   /* Reference by driver id */
   public Driver(int id) {
     //Check the driver actually exists

@@ -167,8 +167,9 @@ public class JourneyPlanner {
             outMessage += "Origin: " + fromStop + ", " + fromArea + "\n";
             outMessage += "Destination: " + toStop + ", " + toArea + "\n";
             outMessage +="\n";
-            
-            if(possibleRoutes.size()==0) {
+
+            // POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN
+            if(possibleRoutes.isEmpty()) {
               outMessage += "There are no possible routes to take...\n";
               return outMessage;
             }
