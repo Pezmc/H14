@@ -8,7 +8,12 @@
  *
  * Created on May 1, 2012, 12:41:14 PM
  */
+
 package ibms;
+
+import java.awt.Component;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Ben
@@ -155,36 +160,64 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
     String route = "";
     String busStopSelection = "";
+    String areaSelection = "";
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
-        //the bus stop we are going to use
-        busStopSelection = (String) busStopDropDown.getSelectedItem();
+        try {
+            
+            //the bus stop we are going to use
+            busStopSelection = (String) busStopDropDown.getSelectedItem();
+            //the area
+            areaSelection = (String) areaDropDown.getSelectedItem();
 
-        //the route along which you are going to travel
-        route = (String) routeDropDown.getSelectedItem();
+            //the route along which you are going to travel
+            route = (String) routeDropDown.getSelectedItem();
 
-        //the time set by the user
-        String time = timeField.getText();
-        int [] times = new int [4];
-        int currentTime = Integer.parseInt(time);
-        double probabilityOfBreakdown = 0;
+            //the time set by the user
+            String time = timeField.getText();
+            int [] times = new int [4];
+            int currentTime = Integer.parseInt(time);
+            double probabilityOfBreakdown = 0;
 
-        if (checkInt(time) && time.length() == 4) {
-            outputArea.setText("Given time for journey: " + time + "\n");
+            //check they have made a descision
+            if(areaSelection.equals("-")||areaSelection.equals(""))
+                displayMessage("You need to choose an area!", "Area Error");
 
-            if (currentTime >= 0000 && currentTime <= 2359) {
-                probabilityOfBreakdown = Math.random();
-                times[0] = Integer.parseInt(Character.toString(time.charAt(0)));
-                times[1] = Integer.parseInt(Character.toString(time.charAt(1)));
-                times[2] = Integer.parseInt(Character.toString(time.charAt(2)));
-                times[3] = Integer.parseInt(Character.toString(time.charAt(3)));
+            //check they have made a descision
+            if(busStopSelection.equals("-")||busStopSelection.equals(""))
+                displayMessage("You need to choose a bus stop!", "Bus Stop Error");
 
-                if (probabilityOfBreakdown > 0.5) {
-                    outputArea.append(cancellation(probabilityOfBreakdown, times));
+            //check they have made a descision
+            if(route.equals("-")||route.equals(""))
+                displayMessage("You need to choose a route!", "Route Error");
+
+            //check again
+            if (checkInt(time) && time.length() == 4) {
+                outputArea.setText("Given time for journey: " + time + "\n");
+
+                if (currentTime >= 0000 && currentTime <= 2359) {
+                    probabilityOfBreakdown = Math.random();
+                    times[0] = Integer.parseInt(Character.toString(time.charAt(0)));
+                    times[1] = Integer.parseInt(Character.toString(time.charAt(1)));
+                    times[2] = Integer.parseInt(Character.toString(time.charAt(2)));
+                    times[3] = Integer.parseInt(Character.toString(time.charAt(3)));
+
+                    if (probabilityOfBreakdown > 0.5) {
+                        outputArea.append(cancellation(probabilityOfBreakdown, times));
+                    }
                 }
-            }
-        } else {
+            } else {
                 System.out.println("Invalid time, please type in a correct time");
-        }
+            }
+        } catch (ibms.InvalidQueryException e) {
+        displayError("There was an error with your query: " + e.getMessage(), "Query Error");
+        System.out.printf("Caught error %s:\n", e.getMessage());
+        System.out.printf("%s %s %s\n\n", e, e.getCause(), e.getClass());
+
+      } catch (Exception e) {
+        displayWarning("There was an unexpected error: " + e.getMessage(), "Error");
+        System.out.printf("Caught error %s:\n", e.getMessage());
+        System.out.printf("%s", e);
+      }
     }//GEN-LAST:event_submitButtonActionPerformed
 
     private void busStopDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busStopDropDownActionPerformed
@@ -198,6 +231,35 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_areaDropDownActionPerformed
 
 
+    /**
+     * Custom Error Handling
+     * @param message
+     * @param title
+     * @param type
+     */
+
+    private void displayDialog(String message, String title, int type) {
+      JOptionPane.showMessageDialog(null, message, title, type);
+    }
+    
+    private void displayError(String message, String title) {
+      this.displayDialog(message, title, JOptionPane.ERROR_MESSAGE);
+    }
+    
+    private void displayWarning(String message, String title) {
+      this.displayDialog(message, title, JOptionPane.WARNING_MESSAGE);
+    }
+    
+    private void displayMessage(String message, String title) {
+      this.displayDialog(message, title, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+
+    /**
+     * busStopUpdate
+     * @param busStop
+     * @param dropdown
+     */
     private void busStopUpdate(String busStop, javax.swing.JComboBox dropdown) {
         int [] routesAtBusStop = BusStopInfo.getRoutes();
 
@@ -207,6 +269,11 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * areaUpdate
+     * @param area
+     * @param dropdown
+     */
     private void areaUpdate(String area, javax.swing.JComboBox dropdown) {
         int areaNum = BusStopInfo.findAreaByName(area);
         int [] busStopsInArea = BusStopInfo.getBusStopsInArea(areaNum);
@@ -218,6 +285,12 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
     }
 
+    /**
+     * cancellation
+     * @param probability
+     * @param time
+     * @return
+     */
     private String cancellation(double probability, int [] time) {
         String message = "";
         double delay = 100 * Math.random();
@@ -252,7 +325,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
                 }
             }
 
-
             message += "There is no delay on route " + route + ".";
             message += "The next available bus at " + busStopSelection + "is at " + nextTime + ".";
         } else {
@@ -262,45 +334,8 @@ public class LiveInfoInterface extends javax.swing.JFrame {
 
             System.out.println("Delay choice: " + delayNum);
 
-            if (delayNum < 1) {
-                message += "There has been an accident on route " + route + " ";
-                message += "after " + busStopSelection + ", ";
-                message += delayTimeMessage;
-            } else if (delayNum < 2 && delayNum > 1) {
-                message += "There has been a crash involving a cyclist on the " + route + " route.";
-                message += delayTimeMessage;
-            } else if (delayNum < 3 && delayNum > 2) {
-                message += "A plane has hit the bus! ";
-                message += delayTimeMessage;
-            } else if (delayNum < 4 && delayNum > 3) {
-                message += "The bus that was supposed to be at this stop has broken down";
-                message += delayTimeMessage;
-
-            }else if (delayNum < 5 && delayNum > 4) {
-                message += "A herd of cows has blocked the road!";
-                message += delayTimeMessage;
-            }else if (delayNum < 6 && delayNum > 5) {
-                message += "The bus driver is running late!";
-                message += delayTimeMessage;
-
-            }else if (delayNum < 7 && delayNum > 6) {
-                message += "A new bus is being driven to collect you as the old bus fell apart.";
-                message += delayTimeMessage;
-
-            }else if (delayNum < 8 && delayNum > 7) {
-                message += "The bus that was supposed to be at this stop has broken down";
-                message += delayTimeMessage;
-
-            }else if (delayNum < 9 && delayNum > 8) {
-                message += "There has been an accident on route " + route + " ";
-                message += "after " + busStopSelection + ", ";
-                message += delayTimeMessage;
-
-            }else if (delayNum < 10 && delayNum > 9) {
-                message += "There has been an accident on route " + route + " ";
-                message += "after " + busStopSelection + ", ";
-                message += delayTimeMessage;
-            }
+            message += "" + LiveInfo.getDelay(delayNum, route, busStopSelection);
+            message += delayTimeMessage;
         }
         return message;
     }
@@ -309,11 +344,18 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     * @param args the command line arguments
     */
     public static void main(String args[]) {
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new LiveInfoInterface().setVisible(true);
-            }
-        });
+        try {
+            database.openBusDatabase();
+
+            java.awt.EventQueue.invokeLater(new Runnable() {
+                public void run() {
+                    new LiveInfoInterface().setVisible(true);
+                }
+            });
+        } catch (ibms.InvalidQueryException e) {
+        JOptionPane.showMessageDialog(null, e.getMessage(), "Query Error", JOptionPane.ERROR_MESSAGE);
+        System.out.printf("Caught error %s", e.getMessage());
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
