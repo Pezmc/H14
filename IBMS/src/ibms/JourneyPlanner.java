@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Ben
+ * @author Pez & Ben
  */
 public class JourneyPlanner {
 
@@ -92,7 +92,7 @@ public class JourneyPlanner {
             outMessage += "The origin and destination information cannot be the same\n";
         } else {
             //the information is legal
-            ArrayList<Integer> fromList = sameRoutesInBusStop(fromAreaId);
+            ArrayList<Integer> fromList = sameRoutesInBusStop(fromBusStopId);
             ArrayList<Integer> toList = sameRoutesInBusStop(toBusStopId);
             
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
