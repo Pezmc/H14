@@ -91,11 +91,11 @@ public class LiveInfo {
         //give the next available bus from the timetable at the bus stop
         //get the timing points for the route selected
         String message = "";
-        int noServices = TimetableInfo.getNumberOfServices(route);
-        int hour = (time[0]) *10 + (time[1]);
-        int mins = (time[2])*10 + (time[3]);
+        //int noServices = TimetableInfo.getNumberOfServices(route);
+        //int hour = (time[0]) *10 + (time[1]);
+        //int mins = (time[2])*10 + (time[3]);
 
-        int actualTime = (hour*60) + mins;
+        //int actualTime = (hour*60) + mins;
         //int nextTime = 0;
         //int tempTime = 0;
 

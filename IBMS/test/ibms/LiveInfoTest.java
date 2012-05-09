@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package ibms;
 
@@ -97,4 +93,37 @@ public class LiveInfoTest {
         assertEquals(expResult, result);
 
     }
+
+    public double probability = 0.5;
+    public int [] time = {1, 4, 0, 0};
+    public int routeNo = 66;
+    public String busStopSelectionName = "Offerton Fold";
+
+    // Time is 1400
+    @Test
+    public void testCancellation() {
+        probability = 0.5;
+        routeNo = 65;
+        busStopSelectionName = "Offerton Fold";
+        String result = LiveInfo.cancellation(probability, time, routeNo, busStopSelectionName);
+
+        // this message is okay even if it isn't the same, just testing an error
+        assertEquals("There has been an accident on route 66 after Offerton Fold. Which has led to",
+                      result);
+    }
+
+    @Test
+    public void testNoCancellation() {
+        String result2 = LiveInfo.noCancellation(probability, time, routeNo, busStopSelectionName);
+        
+        assertEquals("There is no delay on route 66.\nThe next available bus at - Offerton Fold \nwill arrive at normal time.", result2);
+    }
+
+    @Test
+    public void testInfoNotNull() {
+        String result3 = LiveInfo.cancellation(probability, time, routeNo, busStopSelectionName);
+        assertTrue(result3 != null);
+
+    }
+   
 }

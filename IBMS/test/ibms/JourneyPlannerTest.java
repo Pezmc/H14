@@ -65,7 +65,19 @@ public class JourneyPlannerTest {
                       + "Bus stop 'Norfolk Arms' is not located in the Glossop area.\n", result3);
     }
 
-    // RESULT SHOWS THAT CERTAIN CODE NEVER RAN
+    // RESULT ABOVE SHOWS THAT CERTAIN CODE NEVER RAN
+
+    @Test
+    public void testNotNull() {
+        System.out.println("testNotNull");
+        String fromArea = "Birch Vale";
+        String fromStop = "Grouse Hotel";
+        String toArea = "Marple";
+        String toStop = "Back of Beyond";
+        String result20 = JourneyPlanner.getRoutes(fromArea, fromStop, toArea, toStop);
+        assertTrue(result20 != null);
+        
+    }
 
     @Test
     public void testFromAreaID() {
