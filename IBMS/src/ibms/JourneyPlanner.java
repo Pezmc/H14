@@ -53,6 +53,7 @@ public class JourneyPlanner {
 
         /* IS THERE ANY WAY TO HAVE THE OUTPUT CLEARED BEFORE NEW CHOICES ARE SELECTED? */
 
+        outMessage = "";
         //Get the area number from bus stop info, does this work for different Bus Stations?
         fromAreaId = BusStopInfo.findAreaByName(fromArea);
         toAreaId = BusStopInfo.findAreaByName(toArea);
@@ -103,7 +104,7 @@ public class JourneyPlanner {
             outMessage += "The origin and destination information cannot be the same\n";
         } else {
             //the information is legal
-            ArrayList<Integer> fromList = sameRoutesInBusStop(fromAreaId);
+            ArrayList<Integer> fromList = sameRoutesInBusStop(fromBusStopId);
             ArrayList<Integer> toList = sameRoutesInBusStop(toBusStopId);
             
             ArrayList<Integer> possibleRoutes = new ArrayList<Integer>();
@@ -180,6 +181,7 @@ public class JourneyPlanner {
             outMessage += "\n";
 
   /******* POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN *******/
+  /******* FIXED -- Ben ***********/
             if(possibleRoutes.isEmpty()) {
               outMessage += "There are no possible routes to take...\n";
               return outMessage;
@@ -188,10 +190,10 @@ public class JourneyPlanner {
             outMessage += "You can take the following routes: \n";
 
             for(int i = 0; i < possibleRoutes.size();i++) {
-                if((possibleRoutes.get(i) != -1) && (stops[i] != -1)) {
+                //if((possibleRoutes.get(i) != -1) && (stops[i] != -1)) {
                     outMessage += "Route: " + possibleRoutes.get(i) + ".\n";
                     outMessage += "Number of stops between: " + stops[i] + "\n";
-                }
+                //}
             }
             
             outMessage += "\nDone";
