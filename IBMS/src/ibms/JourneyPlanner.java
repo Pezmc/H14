@@ -42,14 +42,25 @@ public class JourneyPlanner {
         return routesAtStop;
     } // sameRoutesInBusStop
 
+    public static int fromAreaId;
+    public static int toAreaId;
+    public static int fromBusStopId;
+    public static int toBusStopId;
 
     public static String getRoutes(String fromArea, String fromStop,String toArea, String toStop) {
 
         database.openBusDatabase();
 
-        //Get the area number from bus stop info
-        int fromAreaId = BusStopInfo.findAreaByName(fromArea);
-        int toAreaId = BusStopInfo.findAreaByName(toArea);
+        /* IS THERE ANY WAY TO HAVE THE OUTPUT CLEARED BEFORE NEW CHOICES ARE SELECTED? */
+
+        outMessage = "";
+        //Get the area number from bus stop info, does this work for different Bus Stations?
+        fromAreaId = BusStopInfo.findAreaByName(fromArea);
+        toAreaId = BusStopInfo.findAreaByName(toArea);
+        
+        System.out.println(fromAreaId);
+        System.out.println(toAreaId);
+
 
         //Get the area code in the form ROM = Romiley'
         String fromAreaCode = BusStopInfo.getAreaCode(fromAreaId);
@@ -66,17 +77,18 @@ public class JourneyPlanner {
                         + fromStop + ", To area: "  +  toAreaCode
                         + " Id: " + toAreaId
                         + " to bus stop," + toStop);
-
-
         // Get the bus stop number for the 'from' and 'to' bus stop
-        int fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
-        int toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
-        
+        fromBusStopId = BusStopInfo.findBusStop(fromAreaCode, fromStop);
+        toBusStopId = BusStopInfo.findBusStop(toAreaCode, toStop);
+
         //Output the bus stop codes
         System.out.println("From bus stop id " + fromBusStopId);
         System.out.println("To bus stop id " + toBusStopId);
 
         //Check that the stops are located in the relavent areas
+/********** FROM TESTS THE TWO BELOW IF STATEMENTS DONT WORK/RUN WHEN I INPUT
+            AN INCORRECT STOP FOR AN AREA, I KNOW THE GUI DOESNT LET YOU
+            BUT STILL - caps lock to get ur attention lol**************/
         if(fromAreaId == 0) {
             outMessage += "Bus stop '" + fromStop + "' is not located in the "
                    + fromArea + " area.\n";
@@ -166,9 +178,11 @@ public class JourneyPlanner {
 
             outMessage += "Origin: " + fromStop + ", " + fromArea + "\n";
             outMessage += "Destination: " + toStop + ", " + toArea + "\n";
-            outMessage +="\n";
-            
-            if(possibleRoutes.size()==0) {
+            outMessage += "\n";
+
+  /******* POSSIBLEROUTES ALWAYS SEEMS TO BE EMPTY SO THIS ALWAYS RUNS - RAJAN *******/
+  /******* FIXED -- Ben ***********/
+            if(possibleRoutes.isEmpty()) {
               outMessage += "There are no possible routes to take...\n";
               return outMessage;
             }
@@ -176,10 +190,10 @@ public class JourneyPlanner {
             outMessage += "You can take the following routes: \n";
 
             for(int i = 0; i < possibleRoutes.size();i++) {
-                if((possibleRoutes.get(i) != -1) && (stops[i] != -1)) {
+                //if((possibleRoutes.get(i) != -1) && (stops[i] != -1)) {
                     outMessage += "Route: " + possibleRoutes.get(i) + ".\n";
                     outMessage += "Number of stops between: " + stops[i] + "\n";
-                }
+                //}
             }
             
             outMessage += "\nDone";

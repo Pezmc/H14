@@ -13,6 +13,7 @@ package ibms;
 
 import java.awt.Component;
 import javax.swing.JOptionPane;
+import static java.util.Calendar.*;
 
 /**
  *
@@ -43,8 +44,7 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         timeField = new javax.swing.JTextField();
         submitButton = new javax.swing.JButton();
-        areaTextLabel = new javax.swing.JLabel();
-        areaDropDown = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,15 +54,15 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         jLabel2.setText("Bus Stop:");
 
         busStopDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
-        busStopDropDown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                busStopDropDownActionPerformed(evt);
-            }
-        });
 
         jLabel3.setText("Select your route:");
 
-        routeDropDown.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "-" }));
+        routeDropDown.setModel(new javax.swing.DefaultComboBoxModel(routeNames));
+        routeDropDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                routeDropDownActionPerformed(evt);
+            }
+        });
 
         outputArea.setColumns(20);
         outputArea.setRows(5);
@@ -79,15 +79,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
             }
         });
 
-        areaTextLabel.setText("Area:");
-
-        areaDropDown.setModel(new javax.swing.DefaultComboBoxModel(BusStopInfo.getAreaNames()));
-        areaDropDown.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                areaDropDownActionPerformed(evt);
-            }
-        });
-
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -95,48 +86,48 @@ public class LiveInfoInterface extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jLabel1)
+                    .add(layout.createSequentialGroup()
+                        .add(jLabel1)
+                        .add(79, 79, 79))
                     .add(layout.createSequentialGroup()
                         .add(timeField, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 116, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                         .add(18, 18, 18)
                         .add(submitButton))
-                    .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                    .add(jLabel4, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
-                        .add(jLabel3)
-                        .add(25, 25, 25)
-                        .add(routeDropDown, 0, 96, Short.MAX_VALUE))
-                    .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(jLabel2)
-                            .add(areaTextLabel))
-                        .add(77, 77, 77)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                            .add(areaDropDown, 0, 96, Short.MAX_VALUE)
-                            .add(busStopDropDown, 0, 96, Short.MAX_VALUE))))
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING, false)
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(jLabel3)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(routeDropDown, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .add(org.jdesktop.layout.GroupLayout.LEADING, layout.createSequentialGroup()
+                                .add(jLabel2)
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                .add(busStopDropDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 163, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                        .add(5, 5, 5))
+                    .add(jLabel5))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 403, Short.MAX_VALUE)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                    .add(org.jdesktop.layout.GroupLayout.LEADING, jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
                     .add(layout.createSequentialGroup()
                         .add(jLabel1)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 14, Short.MAX_VALUE)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(areaTextLabel)
-                            .add(areaDropDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                        .add(18, 18, 18)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-                            .add(jLabel2)
-                            .add(busStopDropDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                         .add(18, 18, 18)
                         .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
                             .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 23, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                             .add(routeDropDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .add(18, 18, 18)
+                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                            .add(jLabel2)
+                            .add(busStopDropDown, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 41, Short.MAX_VALUE)
+                        .add(jLabel5)
                         .add(18, 18, 18)
                         .add(jLabel4)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -149,29 +140,20 @@ public class LiveInfoInterface extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private boolean checkInt (String check) {
-        try {
-            Integer.parseInt(check);
-            return true;
-        } catch (NumberFormatException nfe) {
-            return false;
-        }
-    }
-
     String route = "";
     String busStopSelection = "";
-    String areaSelection = "";
+    int routeNumber = 0;
     private void submitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitButtonActionPerformed
         try {
             
             //the bus stop we are going to use
             busStopSelection = (String) busStopDropDown.getSelectedItem();
             //the area
-            areaSelection = (String) areaDropDown.getSelectedItem();
-
             //the route along which you are going to travel
-            route = (String) routeDropDown.getSelectedItem();
+            route = (String)routeDropDown.getSelectedItem();
+            routeNumber = BusStopInfo.findRoute(route);
 
+            //System.out.println("Route: " + routeNumber);
             //the time set by the user
             String time = timeField.getText();
             int [] times = new int [4];
@@ -179,21 +161,15 @@ public class LiveInfoInterface extends javax.swing.JFrame {
             double probabilityOfBreakdown = 0;
 
             //check they have made a descision
-            if(areaSelection.equals("-")||areaSelection.equals(""))
-                displayMessage("You need to choose an area!", "Area Error");
-
-            //check they have made a descision
             if(busStopSelection.equals("-")||busStopSelection.equals(""))
                 displayMessage("You need to choose a bus stop!", "Bus Stop Error");
 
             //check they have made a descision
-            if(route.equals("-")||route.equals(""))
+            if(routeNumber == 0)
                 displayMessage("You need to choose a route!", "Route Error");
 
             //check again
-            if (checkInt(time) && time.length() == 4) {
-                outputArea.setText("Given time for journey: " + time + "\n");
-
+            if (time.length() == 4) {
                 if (currentTime >= 0000 && currentTime <= 2359) {
                     probabilityOfBreakdown = Math.random();
                     times[0] = Integer.parseInt(Character.toString(time.charAt(0)));
@@ -201,35 +177,32 @@ public class LiveInfoInterface extends javax.swing.JFrame {
                     times[2] = Integer.parseInt(Character.toString(time.charAt(2)));
                     times[3] = Integer.parseInt(Character.toString(time.charAt(3)));
 
+                    outputArea.setText("Given time for journey: " + times[0] + times[1] + ":" + times[2] + times[3] + "\n");
                     if (probabilityOfBreakdown > 0.5) {
-                        outputArea.append(cancellation(probabilityOfBreakdown, times));
+                        outputArea.append(LiveInfo.cancellation(probabilityOfBreakdown, times, routeNumber, busStopSelection));
+                    } else {
+                        outputArea.append(LiveInfo.noCancellation(probabilityOfBreakdown, times, routeNumber, busStopSelection));
                     }
                 }
             } else {
                 System.out.println("Invalid time, please type in a correct time");
             }
         } catch (ibms.InvalidQueryException e) {
-        displayError("There was an error with your query: " + e.getMessage(), "Query Error");
-        System.out.printf("Caught error %s:\n", e.getMessage());
-        System.out.printf("%s %s %s\n\n", e, e.getCause(), e.getClass());
+            displayError("There was an error with your query: " + e.getMessage(), "Query Error");
+            System.out.printf("Caught error %s:\n", e.getMessage());
+            System.out.printf("%s %s %s\n\n", e, e.getCause(), e.getClass());
 
-      } catch (Exception e) {
-        displayWarning("There was an unexpected error: " + e.getMessage(), "Error");
-        System.out.printf("Caught error %s:\n", e.getMessage());
-        System.out.printf("%s", e);
+        } catch (Exception e) {
+            displayWarning("There was an unexpected error: " + e.getMessage(), "Error");
+            System.out.printf("Caught error %s:\n", e.getMessage());
+            System.out.printf("%s", e);
       }
     }//GEN-LAST:event_submitButtonActionPerformed
 
-    private void busStopDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_busStopDropDownActionPerformed
+    private void routeDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_routeDropDownActionPerformed
         // TODO add your handling code here:
-        busStopUpdate((String) busStopDropDown.getSelectedItem(), routeDropDown);
-    }//GEN-LAST:event_busStopDropDownActionPerformed
-
-    private void areaDropDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_areaDropDownActionPerformed
-        // TODO add your handling code here:
-        areaUpdate((String) areaDropDown.getSelectedItem(), busStopDropDown);
-    }//GEN-LAST:event_areaDropDownActionPerformed
-
+        routeUpdate((String) routeDropDown.getSelectedItem(), busStopDropDown);
+    }//GEN-LAST:event_routeDropDownActionPerformed
 
     /**
      * Custom Error Handling
@@ -237,7 +210,6 @@ public class LiveInfoInterface extends javax.swing.JFrame {
      * @param title
      * @param type
      */
-
     private void displayDialog(String message, String title, int type) {
       JOptionPane.showMessageDialog(null, message, title, type);
     }
@@ -253,99 +225,35 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     private void displayMessage(String message, String title) {
       this.displayDialog(message, title, JOptionPane.INFORMATION_MESSAGE);
     }
-
-
-    /**
-     * busStopUpdate
-     * @param busStop
-     * @param dropdown
-     */
-    private void busStopUpdate(String busStop, javax.swing.JComboBox dropdown) {
-        int [] routesAtBusStop = BusStopInfo.getRoutes();
-
-        dropdown.removeAllItems();
-        for (int i = 0; i < routesAtBusStop.length; i ++) {
-            dropdown.addItem(routesAtBusStop[i]);
-        }
-    }
-
     /**
      * areaUpdate
      * @param area
      * @param dropdown
      */
-    private void areaUpdate(String area, javax.swing.JComboBox dropdown) {
-        int areaNum = BusStopInfo.findAreaByName(area);
-        int [] busStopsInArea = BusStopInfo.getBusStopsInArea(areaNum);
+    private void routeUpdate(String route, javax.swing.JComboBox dropdown) {
+
+        int routeNum = BusStopInfo.findRoute(route);
+        int [] busStopsOnRoute = BusStopInfo.getBusStops(routeNum);
 
         dropdown.removeAllItems();
-        for(int busStopId : busStopsInArea) {
-            dropdown.addItem(BusStopInfo.getFullName(busStopId));
+        for(int busStopId : busStopsOnRoute) {
+            dropdown.addItem(BusStopInfo.getStopName(busStopId));
         }
-
-    }
-
-    /**
-     * cancellation
-     * @param probability
-     * @param time
-     * @return
-     */
-    private String cancellation(double probability, int [] time) {
-        String message = "";
-        double delay = 100 * Math.random();
-        String delayTimeMessage = "";
-        if (delay >= 60) {
-            delay = delay / 60;
-        }
-        delayTimeMessage += "which has lead to a delay of " + (int)delay + " mins.";
-
-        //if there is no delay
-        if (probability <= 0.5) {
-            //give the next available bus from the timetable at the bus stop
-            //as there has been no delay
-
-            //get the timing points for the route selected, then use these to 
-            //compare to the raw time
-            int routeInt = Integer.parseInt(route);
-            int [] timingPoints = TimetableInfo.getTimingPoints(routeInt);
-            int nextTime = 0;
-
-            //the raw time is the time given turned into time that the database can handle
-            int rawTime = (time[0]*60*10) + (time[1]*60) + (time[2]*10 + time[3]);
-
-            System.out.println("The raw time I have calculated is: " + rawTime);
-
-            //loop through the timing points, when we find one greater than the currentTime
-            //we inform the passenger of the next time that bus will be at the station in question
-            for (int i = 0; i < timingPoints.length; i ++) {
-                if (rawTime < timingPoints[i]) {
-                    nextTime = (timingPoints[i]/100)*60;
-                    break;
-                }
-            }
-
-            message += "There is no delay on route " + route + ".";
-            message += "The next available bus at " + busStopSelection + "is at " + nextTime + ".";
-        } else {
-            //there has been a delay
-            //pick a random statement to print out regarding a delay
-            double delayNum = Math.random() * 10;
-
-            System.out.println("Delay choice: " + delayNum);
-
-            message += "" + LiveInfo.getDelay(delayNum, route, busStopSelection);
-            message += delayTimeMessage;
-        }
-        return message;
     }
 
     /**
     * @param args the command line arguments
     */
+    public static String[] routeNames;
     public static void main(String args[]) {
         try {
             database.openBusDatabase();
+
+            int[] routes = BusStopInfo.getRoutes();
+            routeNames = new String[routes.length];
+            for (int i = 0; i < routes.length; i ++) {
+                routeNames[i] = BusStopInfo.getRouteName(routes[i]);
+            }
 
             java.awt.EventQueue.invokeLater(new Runnable() {
                 public void run() {
@@ -359,13 +267,12 @@ public class LiveInfoInterface extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox areaDropDown;
-    private javax.swing.JLabel areaTextLabel;
     private javax.swing.JComboBox busStopDropDown;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea outputArea;
     private javax.swing.JComboBox routeDropDown;
